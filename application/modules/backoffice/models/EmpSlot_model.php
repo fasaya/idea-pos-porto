@@ -68,10 +68,8 @@ class EmpSlot_model extends CI_Model
         if ($this->db->trans_status() === FALSE) {
             $this->session->set_flashdata(
                 'message',
-                '<div class="alert alert-danger alert-dismissible fade in" role="alert">
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                '<div class="alert alert-danger">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
                 Failed to add new employee!
                 </div>'
             );
@@ -79,11 +77,9 @@ class EmpSlot_model extends CI_Model
         } else {
             $this->session->set_flashdata(
                 'message',
-                '<div class="alert alert-success alert-dismissible fade in" role="alert">
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-                New employee added! Waiting for verification.
+                '<div class="alert alert-success">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                New Employee Added! Waiting for verificaion.
                 </div>'
             );
             redirect('backoffice/employee/staff');
@@ -148,12 +144,10 @@ class EmpSlot_model extends CI_Model
         if ($this->db->trans_status() === FALSE) {
             $this->session->set_flashdata(
                 'message',
-                '<div class="alert alert-danger alert-dismissible fade in" role="alert">
-                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                     <span aria-hidden="true">&times;</span>
-                 </button>
-                 Failed to edit data!
-                 </div>'
+                '<div class="alert alert-success">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                Failed to edit data!
+                </div>'
             );
             redirect('backoffice/employee/edit_slot/' . $data['id_user']);
         } else {
@@ -165,12 +159,10 @@ class EmpSlot_model extends CI_Model
             }
             $this->session->set_flashdata(
                 'message',
-                '<div class="alert alert-success alert-dismissible fade in" role="alert">
-                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                     <span aria-hidden="true">&times;</span>
-                 </button>
-                 Data updated!
-                 </div>'
+                '<div class="alert alert-success">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                Data updated!
+                </div>'
             );
             redirect('backoffice/employee/edit_slot/' . $data['id_user']);
         }
@@ -194,10 +186,8 @@ class EmpSlot_model extends CI_Model
 
             $this->session->set_flashdata(
                 'message_outlet',
-                '<div class="alert alert-success alert-dismissible fade in" role="alert">
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                '<div class="alert alert-success">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
                 New outlet assigned!
                 </div>'
             );
@@ -205,11 +195,9 @@ class EmpSlot_model extends CI_Model
         } else {
             $this->session->set_flashdata(
                 'message_outlet',
-                '<div class="alert alert-danger alert-dismissible fade in" role="alert">
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-                Failed! Outlet have already assigned.
+                '<div class="alert alert-danger">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                Failed! Outlet have already assigned!
                 </div>'
             );
             redirect('backoffice/employee/edit_slot/' . $value['id_user']);
@@ -231,18 +219,14 @@ class EmpSlot_model extends CI_Model
         if ($jml > 0) {
             $this->db->delete('tb_assignment', array('id_assignment' => $id_assignment));
 
-            $this->session->set_flashdata('message_outlet', '<div class="alert alert-success alert-dismissible fade in" role="alert">
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-            Employee unassignment success!
+            $this->session->set_flashdata('message_outlet', '<div class="alert alert-success">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            Employee unassigned!
             </div>');
             redirect('backoffice/employee/edit_slot/' . $id_user);
         } else {
-            $this->session->set_flashdata('message_outlet', '<div class="alert alert-danger alert-dismissible fade in" role="alert">
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
+            $this->session->set_flashdata('message_outlet', '<div class="alert alert-danger">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
             Failed to unassign employee!
             </div>');
             redirect('backoffice/employee/edit_slot/' . $id_user);
@@ -262,19 +246,15 @@ class EmpSlot_model extends CI_Model
             ];
             $this->db->update('tb_login', $deactivate, "id_login = " . $data_user['id_login']);
 
-            $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible fade in" role="alert">
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-            User deactivated.
+            $this->session->set_flashdata('message', '<div class="alert alert-success">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            User deactivated!
             </div>');
             redirect('backoffice/employee/staff');
         } else {
-            $this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible fade in" role="alert">
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-            Failed to deactivate user.
+            $this->session->set_flashdata('message', '<div class="alert alert-danger">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            Failed to deactivate user!
             </div>');
             redirect('backoffice/employee/edit_slot/' . $id_user);
         }
@@ -293,19 +273,15 @@ class EmpSlot_model extends CI_Model
             ];
             $this->db->update('tb_login', $deactivate, "id_login = " . $data_user['id_login']);
 
-            $this->session->set_flashdata('message', '<div class="alert alert-success alert-dismissible fade in" role="alert">
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-            User reactivated.
+            $this->session->set_flashdata('message', '<div class="alert alert-success">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            User reactivated!
             </div>');
             redirect('backoffice/employee/staff');
         } else {
-            $this->session->set_flashdata('message', '<div class="alert alert-danger alert-dismissible fade in" role="alert">
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-            Failed to reactivate user.
+            $this->session->set_flashdata('message', '<div class="alert alert-success">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            Failed to reactivate user!
             </div>');
             redirect('backoffice/employee/edit_slot/' . $id_user);
         }
@@ -419,7 +395,7 @@ class EmpSlot_model extends CI_Model
         if ($dt['is_active'] == '1') {
             $data = [
                 'desc' => 'Deactivate Employee',
-                'link' => 'employee/deactivate/',
+                'link' => 'backoffice/employee/deactivate/',
                 'type' => 'btn-danger',
                 'icon' => 'fa fa-ban'
             ];
@@ -427,7 +403,7 @@ class EmpSlot_model extends CI_Model
         } else {
             $data = [
                 'desc' => 'Reactivate Employee',
-                'link' => 'employee/reactivate/',
+                'link' => 'backoffice/employee/reactivate/',
                 'type' => 'btn-success',
                 'icon' => 'fa fa-power-off'
             ];

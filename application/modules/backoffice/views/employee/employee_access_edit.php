@@ -96,7 +96,7 @@
                         <div class="row pull-right">
                             <div class="col-sm-12">
                                 <a href="<?= base_url() ?>backoffice/employee/access" class="btn btn-default btn-sm"><i class="fas fa-chevron-left"></i> Back </a>
-                                <button type="button" class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i> Delete </button>
+                                <a class="btn btn-danger btn-sm modal-basic" href="#modalDelete"><i class="fas fa-trash-alt"></i> Delete</a>
                                 <button type="submit" class="btn btn-primary btn-sm"><i class="fas fa-save"></i> Save </button>
                             </div>
                         </div>
@@ -135,3 +135,28 @@
     </div>
     <!-- end: page -->
 </section>
+
+<!-- Modal Delete -->
+<div id="modalDelete" class="modal-block mfp-hide">
+    <section class="card">
+        <header class="card-header">
+            <h2 class="card-title">Are you sure?</h2>
+        </header>
+        <div class="card-body">
+            <div class="modal-wrapper">
+                <div class="modal-text">
+                    <p class="mb-0">Are you sure that you want to delete this role?</p>
+                </div>
+            </div>
+        </div>
+        <footer class="card-footer">
+            <div class="row">
+                <div class="col-md-12 text-right">
+
+                    <a href="<?= base_url() ?>backoffice/employee/delete_emp_access/<?= $id_role; ?>" class="btn btn-danger"><i class="fas fa-trash-alt"></i> Delete </a>
+                    <button class="btn btn-default modal-dismiss">Cancel</button>
+                </div>
+            </div>
+        </footer>
+    </section>
+</div>

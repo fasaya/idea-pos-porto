@@ -51,7 +51,7 @@
 										<th>Role Name</th>
 										<th>Employees Assigned</th>
 										<th>Access</th>
-										<th><i class="fas fa-pencil-alt"></i></th>
+										<th class="text-center"><i class="fas fa-pencil-alt"></i></th>
 									</tr>
 								</thead>
 								<tbody>

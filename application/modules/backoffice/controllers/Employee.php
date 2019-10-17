@@ -67,7 +67,7 @@ class Employee extends CI_Controller
         $this->form_validation->set_rules('email', 'Email', 'valid_email|trim|required');
         $this->form_validation->set_rules('no_hp', 'Phone Number', 'trim|required|xss_clean|numeric');
         $this->form_validation->set_rules('id_role', 'Role Name', 'trim|required|xss_clean');
-        $this->form_validation->set_rules('pin', 'PIN', 'trim|xss_clean');
+        // $this->form_validation->set_rules('pin', 'PIN', 'trim|xss_clean');
         $this->form_validation->set_rules('id_outlet', 'Outlet', 'trim|required|xss_clean');
         $this->form_validation->set_rules('deskripsi', 'Description', 'trim|xss_clean');
 
@@ -113,7 +113,7 @@ class Employee extends CI_Controller
                 'email' => $this->input->post('email', TRUE),
                 'nama' => $this->input->post('nama', TRUE),
                 'phone' => $this->input->post('no_hp', TRUE),
-                'pin' => $this->input->post('pin', TRUE),
+                'pin' => "",
                 'id_outlet' => $this->input->post('id_outlet', TRUE),
                 'deskripsi' => $this->input->post('deskripsi', TRUE)
             ];
@@ -353,7 +353,7 @@ class Employee extends CI_Controller
                 'message',
                 '<div class="alert alert-success">
                 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                <strong>New Role added!</strong>
+                New role added!
                 </div>'
             );
             redirect('backoffice/employee/access');

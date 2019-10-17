@@ -5,14 +5,17 @@ class EmpAccess_model extends CI_Model
 {
     function update_access($id_role, $data)
     {
-        $this->db->update('tb_role', $data);
         $this->db->where('id_role', $id_role);
+        $this->db->update('tb_role', $data);
 
-        $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Role access updated!</div>');
+        $this->session->set_flashdata('message', '<div class="alert alert-success">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        Role access updated!
+        </div>');
         redirect('backoffice/employee/edit_access/' . $id_role);
     }
 
-    function delete_access($id_role)
+    function delete_access($id_role = '0')
     {
         //cek apakah ada yang menggunakan role tsb
         $isUsed = $this->isRoleUsed($id_role);
@@ -22,14 +25,27 @@ class EmpAccess_model extends CI_Model
 
         if (!$isUsed) {
             if ($isDeletable) {
-                $this->db->delete('tb_role', array('id_role' => $id_role));
+                $data = ['is_deleted' => '1'];
+                $this->db->where('id_role', $id_role);
+                $this->db->update('tb_role', $data);
+
+                $this->session->set_flashdata('message', '<div class="alert alert-success">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                Role deleted!
+                </div>');
                 redirect('backoffice/employee/access');
             } else {
-                $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">This is a special role and cannot be deleted by owner, because the employee page can only be accessed in this role.</div>');
+                $this->session->set_flashdata('message', '<div class="alert alert-danger">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                This is a special role and cannot be deleted by owner, because the employee page can only be accessed in this role.
+                </div>');
                 redirect('backoffice/employee/edit_access/' . $id_role);
             }
         } else {
-            $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">This role cannot be deleted because it has been associated with one or several employees. Please first unassigned the employees and try again.</div>');
+            $this->session->set_flashdata('message', '<div class="alert alert-danger">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            This role cannot be deleted because it has been associated with one or several employees. Please first unassigned the employees and try again.
+            </div>');
             redirect('backoffice/employee/edit_access/' . $id_role);
         }
     }
@@ -43,6 +59,7 @@ class EmpAccess_model extends CI_Model
         return $this->db->select("*")
             ->from("tb_role")
             ->where("is_editable", '1')
+            ->where("is_deleted", '0')
             ->order_by("id_role", "ASC")
             ->get();
     }
