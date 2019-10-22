@@ -1,6 +1,6 @@
 <section role="main" class="content-body card-margin">
     <header class="page-header">
-        <h2>Employee Slots</h2>
+        <h2>Staff</h2>
 
         <div class="right-wrapper text-right">
             <ol class="breadcrumbs" style="margin-right:20px">
@@ -92,8 +92,8 @@
         <header class="card-header">
             <h2 class="card-title">Invite Employee</h2>
         </header>
-        <form method="post" action="<?= base_url() ?>backoffice/employee/add_user">
-            <div class="card-body">
+        <div class="card-body">
+            <form method="post" action="<?= base_url() ?>backoffice/employee/add_user">
                 <div class="form-group">
                     <label>Full Name</label>
                     <input type="text" class="form-control" placeholder="Full Name" name='nama'>
@@ -103,7 +103,7 @@
                     <input type="text" class="form-control" placeholder="Email" name='email'>
                 </div>
                 <div class="form-group">
-                    <label>Left Icon</label>
+                    <label>Phone Number</label>
                     <div class="input-group">
                         <span class="input-group-prepend">
                             <span class="input-group-text">
@@ -133,15 +133,15 @@
                     <label>Textarea</label>
                     <textarea name="deskripsi" class="form-control" rows="3" placeholder="Join date: 01 January 2019"></textarea>
                 </div>
-            </div>
-            <footer class="card-footer">
-                <div class="row">
-                    <div class="col-md-12 text-right">
-                        <button class="btn btn-default modal-dismiss">Cancel</button>
-                        <button type="submit" class="btn btn-primary">Invite</button>
-                    </div>
+        </div>
+        <footer class="card-footer">
+            <div class="row">
+                <div class="col-md-12 text-right">
+                    <button class="btn btn-default modal-dismiss">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Invite</button>
                 </div>
-            </footer>
+            </div>
+        </footer>
         </form>
     </section>
 </div>

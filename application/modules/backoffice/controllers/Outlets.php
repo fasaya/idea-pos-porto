@@ -62,10 +62,11 @@ class Outlets extends CI_Controller
             $data['log_stat'] = $this->session->userdata('log_stat');
 
             $cek = $this->Auth_model->validasi_role('b_acc_setting');
-
             if ($cek) {
 
                 if ($data['log_stat']) {
+
+                    $main['provinsi'] = $this->Outlet->fetch_provinsi();
 
                     $main['outlet'] = $this->Outlet->get_outlet()->result();
 

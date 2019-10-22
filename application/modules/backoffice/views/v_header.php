@@ -46,6 +46,9 @@
 	<!-- Head Libs -->
 	<script src="<?= base_url() ?>template/vendor/modernizr/modernizr.js"></script>
 
+	<!-- jquery -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+
 </head>
 
 <body>
@@ -159,7 +162,7 @@
 									</a>
 									<ul class="nav nav-children">
 										<li>
-											<a class="nav-link" href="pages-signup.html">
+											<a class="nav-link" href="<?= base_url() ?>backoffice/library/lists">
 												Item Library
 											</a>
 										</li>

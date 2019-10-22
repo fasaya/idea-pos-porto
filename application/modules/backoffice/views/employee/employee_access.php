@@ -80,8 +80,8 @@
 		<header class="card-header">
 			<h2 class="card-title">Create New Employee Role</h2>
 		</header>
-		<form action="<?= base_url() ?>backoffice/employee/add_role" method="post">
-			<div class="card-body">
+		<div class="card-body">
+			<form action="<?= base_url() ?>backoffice/employee/add_role" method="post">
 				<div class="form-group">
 					<label>Role Name</label>
 					<input type="text" class="form-control" placeholder="Role Name" name='add_role_name'>
@@ -146,15 +146,15 @@
 						</div>
 					</div>
 				</div>
-			</div>
-			<footer class="card-footer">
-				<div class="row">
-					<div class="col-md-12 text-right">
-						<button class="btn btn-default modal-dismiss">Cancel</button>
-						<button type="submit" class="btn btn-primary">Add Role</button>
-					</div>
+		</div>
+		<footer class="card-footer">
+			<div class="row">
+				<div class="col-md-12 text-right">
+					<button class="btn btn-default modal-dismiss">Cancel</button>
+					<button type="submit" class="btn btn-primary">Add Role</button>
 				</div>
-			</footer>
+			</div>
+		</footer>
 		</form>
 	</section>
 </div>

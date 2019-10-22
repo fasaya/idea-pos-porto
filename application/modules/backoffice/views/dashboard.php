@@ -3,7 +3,7 @@
     <h2>Default Layout</h2>
 
     <div class="right-wrapper text-right">
-      <ol class="breadcrumbs">
+      <ol class="breadcrumbs" style="margin-right:20px">
         <li>
           <a href="index.html">
             <i class="fas fa-home"></i>

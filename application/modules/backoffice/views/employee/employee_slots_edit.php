@@ -1,6 +1,6 @@
 <section role="main" class="content-body card-margin">
     <header class="page-header">
-        <h2>Employee Access</h2>
+        <h2>Staff</h2>
 
         <div class="right-wrapper text-right">
             <ol class="breadcrumbs" style="margin-right:20px">
@@ -10,13 +10,13 @@
                     <!-- </a> -->
                 </li>
                 <li><span>Employee</span></li>
-                <li><span>Edit Employee Access</span></li>
+                <li><span>Employee Slots</span></li>
             </ol>
         </div>
     </header>
 
     <!-- start: page -->
-    <thead class="row">
+    <div class="row">
         <div class="col-lg-12">
             <section class="card">
                 <form method="post" action="<?= base_url() ?>backoffice/employee/update_user/<?= $id_user; ?>/<?= $data_user['id_login']; ?>">
@@ -98,7 +98,7 @@
             </section>
         </div>
 
-        <thead class="col-lg-12">
+        <div class="col-lg-12">
             <section class="card">
                 <header class="card-header">
                     <h2 class="card-title">Assigned Outlets</h2>
@@ -140,8 +140,8 @@
                     </div>
                 </div>
             </section>
-        </thead>
-    </thead>
+        </div>
+    </div>
     <!-- end: page -->
 </section>
 
@@ -177,8 +177,8 @@
         <header class="card-header">
             <h2 class="card-title">Assign Employee</h2>
         </header>
-        <form method="post" action="<?= base_url() ?>backoffice/employee/assign_employee/<?= $id_user; ?>">
-            <div class="card-body">
+        <div class="card-body">
+            <form method="post" action="<?= base_url() ?>backoffice/employee/assign_employee/<?= $id_user; ?>">
                 <div class="form-group">
                     <label>Outlet</label>
                     <select name="id_outlet" class="form-control">
@@ -187,15 +187,15 @@
                         <?php endforeach; ?>
                     </select>
                 </div>
-            </div>
-            <footer class="card-footer">
-                <div class="row">
-                    <div class="col-md-12 text-right">
-                        <button class="btn btn-default modal-dismiss">Cancel</button>
-                        <button type="submit" class="btn btn-primary">Assign</button>
-                    </div>
+        </div>
+        <footer class="card-footer">
+            <div class="row">
+                <div class="col-md-12 text-right">
+                    <button class="btn btn-default modal-dismiss">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Assign</button>
                 </div>
-            </footer>
+            </div>
+        </footer>
         </form>
     </section>
 </div>

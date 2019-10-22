@@ -16,8 +16,11 @@ class Outlet_model extends CI_Model
     {
         $this->db->update('tb_outlet', $data, "id_outlet = " . $id_outlet);
 
-        $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Outlet updated!</div>');
-        redirect('outlets/editoutlets/' . $id_outlet);
+        $this->session->set_flashdata('message', '<div class="alert alert-success">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        Outlet updated!
+        </div>');
+        redirect('backoffice/outlets/editoutlets/' . $id_outlet);
     }
 
     function get_outlet_byid($id_outlet)
@@ -30,15 +33,12 @@ class Outlet_model extends CI_Model
         $this->db->insert('tb_outlet', $data);
         $this->session->set_flashdata(
             'message',
-            '<div class="alert alert-success alert-dismissible fade in" role="alert">
-            <button type="button" class="close" data-dismiss="alert"
-                    aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
+            '<div class="alert alert-success">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
             New outlet added!
             </div>'
         );
-        redirect('outlets');
+        redirect('backoffice/outlets');
     }
 
 
