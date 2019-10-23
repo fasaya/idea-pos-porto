@@ -167,7 +167,7 @@
 											</a>
 										</li>
 										<li>
-											<a class="nav-link" href="pages-signin.html">
+											<a class="nav-link" href="<?= base_url() ?>backoffice/library/modifiers">
 												Modifiers
 											</a>
 										</li>

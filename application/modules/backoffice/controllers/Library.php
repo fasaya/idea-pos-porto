@@ -56,4 +56,93 @@ class Library extends CI_Controller
             echo $this->Library->fetch_item($this->input->post('id_outlet'), $this->input->post('id_kategori'), $this->input->post('alert'));
         }
     }
+
+    //###########################################################
+    // Modifiers
+
+    public function modifiers()
+    {
+        $data['title'] = 'Item Library';
+        $data['email'] = $this->session->userdata('email');
+        $data['log_stat'] = $this->session->userdata('log_stat');
+
+        $cek = $this->Auth_model->validasi_role('b_library');
+        if ($cek) {
+
+            if ($data['log_stat']) {
+
+                $main['outlet'] = $this->Library->get_outlet()->result();
+
+                $data['nav'] = $this->Nav_model->get_navigation($data['email']);
+                $this->load->view('v_header', $data);
+                $this->load->view('library/modifiers', $main);
+                $this->load->view('v_footer');
+            } else {
+                $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">Please log in first!</div>');
+                redirect('backoffice');
+            }
+        } else {
+            //get data untuk navigation
+            $data['nav'] = $this->Nav_model->get_navigation($data['email']);
+            $this->load->view('v_header', $data);
+            $this->load->view('unaccessible');
+            $this->load->view('v_footer');
+        }
+    }
+
+    function fetch_modifiers()
+    {
+        if ($this->input->post('id_outlet')) {
+            echo $this->Library->fetch_modifiers($this->input->post('id_outlet'));
+        }
+    }
+
+    function addmodifier()
+    {
+        $this->form_validation->set_rules('nama', 'Modifier Name', 'trim|required|xss_clean');
+        $this->form_validation->set_rules('id_outlet', 'Outlet', 'trim|required|xss_clean');
+
+        if ($this->form_validation->run() == false) {
+
+            $data['title'] = 'Item Library';
+            $data['email'] = $this->session->userdata('email');
+            $data['log_stat'] = $this->session->userdata('log_stat');
+
+            $cek = $this->Auth_model->validasi_role('b_library');
+            if ($cek) {
+
+                if ($data['log_stat']) {
+
+                    $main['outlet'] = $this->Library->get_outlet()->result();
+
+                    $data['nav'] = $this->Nav_model->get_navigation($data['email']);
+                    $this->load->view('v_header', $data);
+                    $this->load->view('library/modifiers', $main);
+                    $this->load->view('v_footer');
+                } else {
+                    $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">Please log in first!</div>');
+                    redirect('backoffice');
+                }
+            } else {
+                //get data untuk navigation
+                $data['nav'] = $this->Nav_model->get_navigation($data['email']);
+                $this->load->view('v_header', $data);
+                $this->load->view('unaccessible');
+                $this->load->view('v_footer');
+            }
+        } else {
+            if (isset($_POST['saveall'])) {
+                $add = [
+                    'nama' => $this->input->post('nama', TRUE)
+                ];
+                $this->Library->addModifier('saveall', $add);
+            } elseif (isset($_POST['save'])) {
+                $add = [
+                    'id_outlet' => $this->input->post('id_outlet', TRUE),
+                    'nama' => $this->input->post('nama', TRUE)
+                ];
+                $this->Library->addModifier('save', $add);
+            }
+        }
+    }
 }

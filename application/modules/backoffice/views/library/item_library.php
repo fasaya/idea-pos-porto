@@ -36,10 +36,8 @@
 					<div class="row">
 						<?php if (validation_errors()) : ?>
 							<div class="col-sm-12">
-								<div class="alert alert-danger alert-dismissible fade in" role="alert">
-									<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-										<span aria-hidden="true">&times;</span>
-									</button>
+								<div class="alert alert-danger">
+									<button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
 									<?= validation_errors(); ?>
 								</div>
 							</div>
@@ -135,27 +133,43 @@
 					</div>
 				</div>
 				<div class="form-group">
-					<label>Assign Outlet (you can select more Outlets when the employee is verified)</label><br>
-					<select name="id_outlet" class="form-control">
-						<?php foreach ($outlet as $o) : ?>
-							<option value="<?= $o->id_outlet; ?>"><?= $o->nama; ?></option>
-						<?php endforeach; ?>
-					</select>
+					<label class="">Vertical Group</label>
+
+					<section class="form-group-vertical">
+						<div class="input-group">
+							<input type="text" class="form-control input-group-prepend" placeholder="Username">
+							<input type="text" class="form-control" placeholder="Username">
+						</div>
+						<div class="input-group">
+							<input type="text" class="form-control input-group-prepend" placeholder="Username">
+							<input type="text" class="form-control" placeholder="Username">
+						</div>
+						<button type="button" class="btn btn-primary btn-sm btn-block last">Add Option</button>
+					</section>
 				</div>
 				<div class="form-group">
 					<label>Select Modifier</label>
-					<select class="form-control" multiple="multiple" data-plugin-multiselect data-plugin-options='{ "maxHeight": 200 }' id="modifier">
-						<option value="cheese">Cheese</option>
-						<option value="tomatoes" selected>Tomatoes</option>
-						<option value="mozarella" selected>Mozzarella</option>
-						<option value="mushrooms">Mushrooms</option>
-						<option value="pepperoni">Pepperoni</option>
-						<option value="onions">Onions</option>
+					<select class="form-control" multiple="multiple" data-plugin-multiselect data-plugin-options='{ "maxHeight": 200, "includeSelectAllOption": true }' id="modifier" name="id_modifier">
+						<!-- <optgroup label="Mathematics"> -->
+						<option value="analysis">Analysis</option>
+						<option value="algebra">Linear Algebra</option>
+						<option value="discrete">Discrete Mathematics</option>
+						<option value="numerical">Numerical Analysis</option>
+						<option value="probability">Probability Theory</option>
+						<!-- </optgroup> -->
 					</select>
 				</div>
 				<div class="form-group">
 					<label>Description</label>
 					<textarea name="deskripsi" class="form-control" rows="3" placeholder="Item description"></textarea>
+				</div>
+				<div class="form-group">
+					<label>Outlet</label><br>
+					<select name="id_outlet" class="form-control">
+						<?php foreach ($outlet as $o) : ?>
+							<option value="<?= $o->id_outlet; ?>"><?= $o->nama; ?></option>
+						<?php endforeach; ?>
+					</select>
 				</div>
 		</div>
 		<footer class="card-footer">

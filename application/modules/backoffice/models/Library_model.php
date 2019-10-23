@@ -3,12 +3,28 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 class Library_model extends CI_Model
 {
-    function add_item()
+
+
+    function get_category()
     {
-        // 
+        return $this->db->select("*")
+            ->from("tb_product_category")
+            ->where("is_deleted", '0')
+            ->order_by("id_kategori", "ASC")
+            ->get();
+    }
+
+    function get_outlet()
+    {
+        return $this->db->select("id_outlet, nama")
+            ->from("tb_outlet")
+            ->where("is_active", '1')
+            ->order_by("id_outlet", "ASC")
+            ->get();
     }
 
     // ####################################################################################################
+    // Item Library
 
     function fetch_item($id_outlet, $id_kategori, $alert)
     {
@@ -36,27 +52,72 @@ class Library_model extends CI_Model
             <td></td>
             <td></td>
             <td></td>
-            <td class="actions-hover actions-fade text-center"><a href="<?= base_url() ?>backoffice/library/edit_item"><i class="fas fa-pencil-alt"></i></a></td>
+            <td class="actions-hover actions-fade text-center"><a href="' . base_url() . 'backoffice/library/editItem"><i class="fas fa-pencil-alt"></i></a></td>
             </tr>';
         }
 
         return $output;
     }
 
-    function get_category()
+    function add_item()
     {
-        return $this->db->select("*")
-            ->from("tb_product_category")
-            ->where("is_deleted", '0')
-            ->order_by("id_kategori", "ASC")
-            ->get();
+        // 
     }
 
-    function get_outlet()
+
+
+    // ####################################################################################################
+    // Modifiers
+
+    function fetch_modifiers($id_outlet)
     {
-        return $this->db->select("id_outlet, nama")
-            ->from("tb_outlet")
-            ->order_by("id_outlet", "ASC")
-            ->get();
+        $this->db->select("*");
+        $this->db->from("tb_product_mod");
+        $this->db->where("id_outlet = " . $id_outlet);
+        $this->db->order_by("id_mod", "ASC");
+        $query = $this->db->get()->result();
+
+
+        $output = "";
+
+        foreach ($query as $row) {
+            $output .= '
+            <tr>
+            <td>' . $row->nama . '</td>
+            <td></td>
+            <td class="actions-hover actions-fade text-center"><a href="' . base_url() . 'backoffice/library/editModofier"><i class="fas fa-pencil-alt"></i></a></td>
+            </tr>';
+        }
+
+        return $output;
+    }
+
+    function addModifier($tipe, $data)
+    {
+        if ($tipe == "saveall") {
+            $outlet = $this->get_outlet()->result();
+            foreach ($outlet as $o) {
+                $data['id_outlet'] = $o->id_outlet;
+                $this->db->insert('tb_product_mod', $data);
+            }
+            $this->session->set_flashdata(
+                'message',
+                '<div class="alert alert-success">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            New modifier added to all! You can now add the modifier options.
+            </div>'
+            );
+        } elseif ($tipe == "save") {
+            $this->db->insert('tb_product_mod', $data);
+            $this->session->set_flashdata(
+                'message',
+                '<div class="alert alert-success">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            New modifier added! You can now add the modifier options.
+            </div>'
+            );
+        }
+
+        redirect('backoffice/library/modifiers');
     }
 } //end model
