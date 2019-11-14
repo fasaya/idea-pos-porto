@@ -26,6 +26,7 @@
 						</div>
 						<div class="col-sm-6">
 							<div class="pull-right">
+								<button class="btn btn-sm btn-default"><i class="fas fa-store-alt"></i> Outlet 1</button>
 								<a href="" class="btn btn-sm btn-primary"><i class="fas fa-file-download"></i> Export</a>
 								<a href="#modalForm" class="modal-with-form btn btn-sm btn-primary"><i class="fas fa-plus"></i> Create Item</a>
 							</div>
@@ -33,6 +34,41 @@
 					</div>
 				</header>
 				<div class="card-body">
+					<div class="alert alert-default m-0">
+						<form action="">
+							<h5 class="mt-0"><i class="fas fa-filter"></i> Filter</h5>
+							<div class="row">
+								<div class="col-sm-4">
+									<select data-plugin-selectTwo id="id_outlet" class="form-control populate" style="width:100%">
+										<!-- <optgroup label="Alaskan/Hawaiian Time Zone"> -->
+										<?php foreach ($outlet as $o) : ?>
+											<option value="<?= $o->id_outlet; ?>"><?= $o->nama; ?></option>
+										<?php endforeach; ?>
+										<!-- </optgroup> -->
+									</select>
+								</div>
+								<div class="col-sm-3">
+									<select id="id_kategori" class="form-control" style="width:100%">
+										<option value="all" selected>All Categories</option>
+										<?php foreach ($category as $c) : ?>
+											<option value="<?= $c->id_kategori; ?>"><?= $c->nama; ?></option>
+										<?php endforeach; ?>
+									</select>
+								</div>
+								<div class="col-sm-3">
+									<select id="alert" class="form-control" style="width:100%">
+										<option value="all">All Inventory</option>
+										<option value="low">Low Stock Alert</option>
+										<option value="out">Out of Stock Alert</option>
+									</select>
+								</div>
+								<div class="col-sm-2">
+									<button type="submit" name="filter" class="btn btn-primary" style="width:100%">Submit</button>
+								</div>
+							</div>
+						</form>
+					</div>
+
 					<div class="row">
 						<?php if (validation_errors()) : ?>
 							<div class="col-sm-12">
@@ -45,35 +81,6 @@
 
 						<div class="col-sm-12">
 							<?= $this->session->flashdata('message') ?>
-						</div>
-
-						<div class="col-sm-12">
-							<div class="row">
-								<div class="col-sm-4">
-									<select data-plugin-selectTwo id="id_outlet" class="form-control populate">
-										<!-- <optgroup label="Alaskan/Hawaiian Time Zone"> -->
-										<?php foreach ($outlet as $o) : ?>
-											<option value="<?= $o->id_outlet; ?>"><?= $o->nama; ?></option>
-										<?php endforeach; ?>
-										<!-- </optgroup> -->
-									</select>
-								</div>
-								<div class="col-sm-4">
-									<select id="id_kategori" class="form-control">
-										<option value="all" selected>All Categories</option>
-										<?php foreach ($category as $c) : ?>
-											<option value="<?= $c->id_kategori; ?>"><?= $c->nama; ?></option>
-										<?php endforeach; ?>
-									</select>
-								</div>
-								<div class="col-sm-4">
-									<select id="alert" class="form-control">
-										<option value="all">All Inventory</option>
-										<option value="low">Low Stock Alert</option>
-										<option value="out">Out of Stock Alert</option>
-									</select>
-								</div>
-							</div>
 						</div>
 
 						<div class="col-sm-12" style="margin-top:20px;">
@@ -89,7 +96,17 @@
 									</tr>
 								</thead>
 								<tbody id="items">
-
+									<?php foreach ($items as $row) {
+										?>
+										<tr>
+											<td><?= $row->nama; ?></td>
+											<td><?= $row->kategori; ?> </td>
+											<td></td>
+											<td></td>
+											<td></td>
+											<td class="actions-hover actions-fade text-center"><a href="' . base_url() . 'backoffice/library/editItem"><i class="fas fa-pencil-alt"></i></a></td>
+										</tr>
+									<?php } ?>
 								</tbody>
 							</table>
 						</div>
@@ -185,7 +202,7 @@
 	</section>
 </div>
 
-<script>
+<!-- <script>
 	$(document).ready(function() {
 
 		$(document).ready(function() {
@@ -231,4 +248,4 @@
 		});
 
 	});
-</script>
+</script> -->

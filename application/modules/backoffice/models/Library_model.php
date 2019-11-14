@@ -4,6 +4,23 @@ defined('BASEPATH') or exit('No direct script access allowed');
 class Library_model extends CI_Model
 {
 
+    function get_item($id_outlet = 'all', $id_kategori = 'all', $alert = 'all')
+    {
+        $this->db->select("tb_product.nama as nama, tb_product_category.nama as kategori");
+        $this->db->from("tb_product, tb_product_category");
+        $this->db->where("tb_product.id_kategori = tb_product_category.id_kategori");
+        if ($id_kategori != 'all') {
+            $this->db->where("tb_product.id_kategori = " . $id_kategori);
+        }
+        // if ($alert != 'all') {
+        //     $this->db->where("tb_product.id_kategori = " . $id_kategori);
+        // }
+        if ($id_outlet != 'all') {
+            $this->db->where("tb_product.id_outlet = " . $id_outlet);
+        }
+        $this->db->order_by("tb_product.id_item", "ASC");
+        return $this->db->get()->result();
+    }
 
     function get_category()
     {

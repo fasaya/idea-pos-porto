@@ -53,7 +53,7 @@
                 <div class="card-body">
                     <form action="<?= base_url() ?>backoffice/backoffice" method="post">
                         <div class="form-group mb-3">
-                            <label>Username</label>
+                            <label>Email</label>
                             <div class="input-group">
                                 <input name="email" type="text" class="form-control form-control-lg" />
                                 <span class="input-group-append">

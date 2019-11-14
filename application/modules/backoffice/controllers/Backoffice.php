@@ -34,8 +34,6 @@ class Backoffice extends CI_Controller
 
         $user = $this->db->get_where('tb_login', ['email' => $email])->row_array();
 
-
-
         //contoh password hash
         //nanti pas register dikasih password_hash($pass1, $pass2)
         //trus yang passdrdb ganti dgn $user['pwd']
