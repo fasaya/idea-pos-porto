@@ -42,7 +42,7 @@
     <!-- start: page -->
     <section class="body-sign">
         <div class="center-sign">
-            <a href="/" class="logo float-left">
+            <a href="#" class="logo float-left">
                 <img src="<?= base_url() ?>template/img/logo.png" height="54" alt="Idea POS" />
             </a>
 
@@ -51,6 +51,7 @@
                     <h2 class="title text-uppercase font-weight-bold m-0"><i class="fas fa-user mr-1"></i> Sign In</h2>
                 </div>
                 <div class="card-body">
+                    <?= $this->session->flashdata('message') ?>
                     <form action="<?= base_url() ?>backoffice/backoffice" method="post">
                         <div class="form-group mb-3">
                             <label>Email</label>

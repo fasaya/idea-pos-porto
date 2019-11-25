@@ -58,15 +58,11 @@ class Backoffice extends CI_Controller
                     ];
                     $this->session->set_userdata($new_session);
 
-                    //insert ke tabel login_history
-                    $timezone = new DateTimeZone('Asia/Makassar');
-                    $dt = new DateTime();
-                    $dt->setTimeZone($timezone);
-                    $date = $dt->format('Y-m-d H:i:s');
-
                     $data = [
                         'email' => $user['email'],
-                        'date' => $date
+                        'ip_address' => $this->getRealIP(),
+                        'user_agent' => $_SERVER['HTTP_USER_AGENT'],
+                        'date' => new_date()
                     ];
                     $this->db->insert('login_history', $data);
 
@@ -92,5 +88,40 @@ class Backoffice extends CI_Controller
 
         $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">You have been logged out!</div>');
         redirect('backoffice');
+    }
+
+    private function getRealIP()
+    {
+        if (!empty($_SERVER['HTTP_CLIENT_IP'])) //CHEK IP YANG DISHARE DARI INTERNET  
+        {
+            $ip = $_SERVER['HTTP_CLIENT_IP'];
+        } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) //UNTUK CEK IP DARI PROXY  
+        {
+            $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+        } else {
+            $ip = $_SERVER['REMOTE_ADDR'];
+        }
+        return $ip;
+    }
+
+    private function getClientIP()
+    {
+        if (isset($_SERVER)) {
+            if (isset($_SERVER["HTTP_X_FORWARDED_FOR"]))
+                return $_SERVER["HTTP_X_FORWARDED_FOR"];
+
+            if (isset($_SERVER["HTTP_CLIENT_IP"]))
+                return $_SERVER["HTTP_CLIENT_IP"];
+
+            return $_SERVER["REMOTE_ADDR"];
+        }
+
+        if (getenv('HTTP_X_FORWARDED_FOR'))
+            return getenv('HTTP_X_FORWARDED_FOR');
+
+        if (getenv('HTTP_CLIENT_IP'))
+            return getenv('HTTP_CLIENT_IP');
+
+        return getenv('REMOTE_ADDR');
     }
 }

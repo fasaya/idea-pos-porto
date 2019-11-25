@@ -40,32 +40,8 @@ class Library extends CI_Controller
 
     public function modifiers()
     {
-        $data['title'] = 'Item Library';
-        $data['email'] = $this->session->userdata('email');
-        $data['log_stat'] = $this->session->userdata('log_stat');
-
-        $cek = $this->Auth_model->validasi_role('b_library');
-        if ($cek) {
-
-            if ($data['log_stat']) {
-
-                $main['outlet'] = $this->Library->get_outlet()->result();
-
-                $data['nav'] = $this->Nav_model->get_navigation($data['email']);
-                $this->load->view('v_header', $data);
-                $this->load->view('library/modifiers', $main);
-                $this->load->view('v_footer');
-            } else {
-                $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">Please log in first!</div>');
-                redirect('backoffice');
-            }
-        } else {
-            //get data untuk navigation
-            $data['nav'] = $this->Nav_model->get_navigation($data['email']);
-            $this->load->view('v_header', $data);
-            $this->load->view('unaccessible');
-            $this->load->view('v_footer');
-        }
+        $main['outlet'] = $this->Library->get_outlet()->result();
+        $this->Helper->view('library/modifiers', $main, 'b_library');
     }
 
     function fetch_modifiers()
@@ -82,32 +58,7 @@ class Library extends CI_Controller
 
         if ($this->form_validation->run() == false) {
 
-            $data['title'] = 'Item Library';
-            $data['email'] = $this->session->userdata('email');
-            $data['log_stat'] = $this->session->userdata('log_stat');
-
-            $cek = $this->Auth_model->validasi_role('b_library');
-            if ($cek) {
-
-                if ($data['log_stat']) {
-
-                    $main['outlet'] = $this->Library->get_outlet()->result();
-
-                    $data['nav'] = $this->Nav_model->get_navigation($data['email']);
-                    $this->load->view('v_header', $data);
-                    $this->load->view('library/modifiers', $main);
-                    $this->load->view('v_footer');
-                } else {
-                    $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">Please log in first!</div>');
-                    redirect('backoffice');
-                }
-            } else {
-                //get data untuk navigation
-                $data['nav'] = $this->Nav_model->get_navigation($data['email']);
-                $this->load->view('v_header', $data);
-                $this->load->view('unaccessible');
-                $this->load->view('v_footer');
-            }
+            $this->modifiers();
         } else {
             if (isset($_POST['saveall'])) {
                 $add = [

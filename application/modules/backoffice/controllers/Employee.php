@@ -10,7 +10,7 @@ class Employee extends CI_Controller
         // $this->load->model('Nav_model');
         $this->load->model('EmpAccess_model', 'EmpAccess');
         $this->load->model('EmpSlot_model', 'EmpSlot');
-        $this->load->model('Help_model', 'Help');
+        $this->load->model('Help_model', 'Helper');
         $this->load->library('form_validation');
     }
 
@@ -24,40 +24,18 @@ class Employee extends CI_Controller
 
     public function staff($status = 'active')
     {
-        $data['title'] = 'Employee Slots';
-        $data['email'] = $this->session->userdata('email');
-        $data['log_stat'] = $this->session->userdata('log_stat');
 
-        $cek = $this->Auth_model->validasi_role('b_employee');
-        if ($cek) {
+        $main['outlet'] = $this->EmpSlot->get_outlet()->result();
+        $main['role'] = $this->EmpAccess->get_role()->result();
 
-            if ($data['log_stat']) {
-
-                $list['outlet'] = $this->EmpSlot->get_outlet()->result();
-                $list['role'] = $this->EmpAccess->get_role()->result();
-
-                $data['nav'] = $this->Nav_model->get_navigation($data['email']);
-                $this->load->view('v_header', $data);
-                if ($status == 'inactive') {
-                    $list['opt'] = "Inactive Employee";
-                    $list['user'] = $this->EmpSlot->get_user_off()->result();
-                    $this->load->view('employee/employee_slots', $list);
-                } else {
-                    $list['opt'] = "Active Employee";
-                    $list['user'] = $this->EmpSlot->get_user()->result();
-                    $this->load->view('employee/employee_slots', $list);
-                }
-                $this->load->view('v_footer');
-            } else {
-                $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">Please log in first!</div>');
-                redirect('backoffice');
-            }
+        if ($status == 'inactive') {
+            $main['opt'] = "Inactive Employee";
+            $main['user'] = $this->EmpSlot->get_user_off()->result();
+            $this->Helper->view('employee/employee_slots', $main, 'b_employee');
         } else {
-            //get data untuk navigation
-            $data['nav'] = $this->Nav_model->get_navigation($data['email']);
-            $this->load->view('v_header', $data);
-            $this->load->view('unaccessible');
-            $this->load->view('v_footer');
+            $main['opt'] = "Active Employee";
+            $main['user'] = $this->EmpSlot->get_user()->result();
+            $this->Helper->view('employee/employee_slots', $main, 'b_employee');
         }
     }
 
@@ -72,41 +50,7 @@ class Employee extends CI_Controller
         $this->form_validation->set_rules('deskripsi', 'Description', 'trim|xss_clean');
 
         if ($this->form_validation->run() == false) {
-            $data['title'] = 'Employee Slots';
-            $data['email'] = $this->session->userdata('email');
-            $data['log_stat'] = $this->session->userdata('log_stat');
-
-            $cek = $this->Auth_model->validasi_role('b_employee');
-            if ($cek) {
-
-                if ($data['log_stat']) {
-
-                    $list['outlet'] = $this->EmpSlot->get_outlet()->result();
-                    $list['role'] = $this->EmpAccess->get_role()->result();
-
-                    $data['nav'] = $this->Nav_model->get_navigation($data['email']);
-                    $this->load->view('v_header', $data);
-                    if ($status == 'inactive') {
-                        $list['opt'] = "Inactive Employee";
-                        $list['user'] = $this->EmpSlot->get_user_off()->result();
-                        $this->load->view('employee/employee_slots', $list);
-                    } else {
-                        $list['opt'] = "Active Employee";
-                        $list['user'] = $this->EmpSlot->get_user()->result();
-                        $this->load->view('employee/employee_slots', $list);
-                    }
-                    $this->load->view('v_footer');
-                } else {
-                    $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">Please log in first!</div>');
-                    redirect('backoffice');
-                }
-            } else {
-                //get data untuk navigation
-                $data['nav'] = $this->Nav_model->get_navigation($data['email']);
-                $this->load->view('v_header', $data);
-                $this->load->view('unaccessible');
-                $this->load->view('v_footer');
-            }
+            $this->staff();
         } else {
             $insert = [
                 'id_role' => $this->input->post('id_role', TRUE),
@@ -123,48 +67,22 @@ class Employee extends CI_Controller
 
     public function edit_slot($id_user = '0')
     {
-        $data['title'] = 'Employee Slots';
-        $data['email'] = $this->session->userdata('email');
-        $data['log_stat'] = $this->session->userdata('log_stat');
+        $isUserExist = $this->EmpSlot->isUserExist($id_user);
+        if ($isUserExist) {
 
-        $cek = $this->Auth_model->validasi_role('b_employee');
-        if ($cek) {
+            //hanya employee yang dapat diedit datanya, user utama tidak bisa
 
-            if ($data['log_stat']) {
+            // $main['user'] = $this->EmpSlot->get_user()->result();
+            $main['id_user'] = $id_user;
+            $main['outlet'] = $this->EmpSlot->get_outlet()->result();
+            $main['data_user'] = $this->EmpSlot->show_data_user($id_user);
+            $main['role'] = $this->EmpAccess->get_role()->result();
+            $main['user'] = $this->EmpSlot->get_assignedUser($id_user)->result();
+            $main['btn'] = $this->EmpSlot->activate_button($id_user);
 
-                $isUserExist = $this->EmpSlot->isUserExist($id_user);
-                if ($isUserExist) {
-
-                    //hanya employee yang dapat diedit datanya, user utama tidak bisa
-
-                    // $main['user'] = $this->EmpSlot->get_user()->result();
-                    $main['id_user'] = $id_user;
-                    $main['outlet'] = $this->EmpSlot->get_outlet()->result();
-                    $main['data_user'] = $this->EmpSlot->show_data_user($id_user);
-                    $main['role'] = $this->EmpAccess->get_role()->result();
-                    $main['user'] = $this->EmpSlot->get_assignedUser($id_user)->result();
-                    $main['btn'] = $this->EmpSlot->activate_button($id_user);
-
-                    $data['nav'] = $this->Nav_model->get_navigation($data['email']);
-                    $this->load->view('v_header', $data);
-                    $this->load->view('employee/employee_slots_edit', $main);
-                    $this->load->view('v_footer');
-                } else {
-                    $data['nav'] = $this->Nav_model->get_navigation($data['email']);
-                    $this->load->view('v_header', $data);
-                    $this->load->view('blank');
-                    $this->load->view('v_footer');
-                }
-            } else {
-                $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">Please log in first!</div>');
-                redirect('backoffice/employee/access');
-            }
+            $this->Helper->view('employee/employee_slots_edit', $main, 'b_employee');
         } else {
-            //get data untuk navigation
-            $data['nav'] = $this->Nav_model->get_navigation($data['email']);
-            $this->load->view('v_header', $data);
-            $this->load->view('unaccessible');
-            $this->load->view('v_footer');
+            $this->Helper->view('blank', '', 'b_employee');
         }
     }
 
@@ -179,49 +97,7 @@ class Employee extends CI_Controller
         $this->form_validation->set_rules('deskripsi', 'Description', 'trim|xss_clean');
 
         if ($this->form_validation->run() == false) {
-            $data['title'] = 'Employee Slots';
-            $data['email'] = $this->session->userdata('email');
-            $data['log_stat'] = $this->session->userdata('log_stat');
-
-            $cek = $this->Auth_model->validasi_role('b_employee');
-            if ($cek) {
-
-                if ($data['log_stat']) {
-
-                    $isUserExist = $this->EmpSlot->isUserExist($id_user);
-                    if ($isUserExist) {
-
-                        //hanya employee yang dapat diedit datanya, user utama tidak bisa
-
-                        // $main['user'] = $this->EmpSlot->get_user()->result();
-                        $main['id_user'] = $id_user;
-                        $main['outlet'] = $this->EmpSlot->get_outlet()->result();
-                        $main['data_user'] = $this->EmpSlot->show_data_user($id_user);
-                        $main['role'] = $this->EmpAccess->get_role()->result();
-                        $main['user'] = $this->EmpSlot->get_assignedUser($id_user)->result();
-                        $main['btn'] = $this->EmpSlot->activate_button($id_user);
-
-                        $data['nav'] = $this->Nav_model->get_navigation($data['email']);
-                        $this->load->view('v_header', $data);
-                        $this->load->view('employee/employee_slots_edit', $main);
-                        $this->load->view('v_footer');
-                    } else {
-                        $data['nav'] = $this->Nav_model->get_navigation($data['email']);
-                        $this->load->view('v_header', $data);
-                        $this->load->view('blank');
-                        $this->load->view('v_footer');
-                    }
-                } else {
-                    $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">Please log in first!</div>');
-                    redirect('backoffice/employee/access');
-                }
-            } else {
-                //get data untuk navigation
-                $data['nav'] = $this->Nav_model->get_navigation($data['email']);
-                $this->load->view('v_header', $data);
-                $this->load->view('unaccessible');
-                $this->load->view('v_footer');
-            }
+            $this->edit_slot();
         } else {
             $data = [
                 'id_user' => $id_user,
@@ -245,7 +121,7 @@ class Employee extends CI_Controller
         $this->form_validation->set_rules('id_outlet', 'Outlet', 'trim|required|xss_clean');
 
         if ($this->form_validation->run() == false) {
-            // 
+            $this->edit_slot();
         } else {
             $assign = [
                 'id_outlet' => $this->input->post('id_outlet', TRUE),
@@ -279,31 +155,8 @@ class Employee extends CI_Controller
 
     public function access()
     {
-        $cek = $this->Auth_model->validasi_role('b_employee');
-        $data['title'] = 'Employee Access';
-
-        $data['email'] = $this->session->userdata('email');
-        $data['log_stat'] = $this->session->userdata('log_stat');
-
-        if ($cek) {
-
-            if ($data['log_stat']) {
-                $data['role'] = $this->EmpAccess->get_role()->result();
-                $data['nav'] = $this->Nav_model->get_navigation($data['email']);
-                $this->load->view('v_header', $data);
-                $this->load->view('employee/employee_access');
-                $this->load->view('v_footer');
-            } else {
-                $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">Please log in first!</div>');
-                redirect('backoffice');
-            }
-        } else {
-            //get data untuk navigation
-            $data['nav'] = $this->Nav_model->get_navigation($data['email']);
-            $this->load->view('v_header', $data);
-            $this->load->view('unaccessible');
-            $this->load->view('v_footer');
-        }
+        $main['role'] = $this->EmpAccess->get_role()->result();
+        $this->Helper->view('employee/employee_access', $main, 'b_employee');
     }
 
     public function add_role()
@@ -311,42 +164,18 @@ class Employee extends CI_Controller
         $this->form_validation->set_rules('add_role_name', 'Role Name', 'trim|required|xss_clean');
 
         if ($this->form_validation->run() == false) {
-
-            $data['title'] = 'Employee Access';
-            $data['email'] = $this->session->userdata('email');
-            $data['log_stat'] = $this->session->userdata('log_stat');
-
-            $cek = $this->Auth_model->validasi_role('b_employee');
-            if ($cek) {
-
-                if ($data['log_stat']) {
-                    $data['role'] = $this->EmpAccess->get_role()->result();
-                    $data['nav'] = $this->Nav_model->get_navigation($data['email']);
-                    $this->load->view('v_header', $data);
-                    $this->load->view('employee/employee_access');
-                    $this->load->view('v_footer');
-                } else {
-                    $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">Please log in first!</div>');
-                    redirect('backoffice');
-                }
-            } else {
-                //get data untuk navigation
-                $data['nav'] = $this->Nav_model->get_navigation($data['email']);
-                $this->load->view('v_header', $data);
-                $this->load->view('unaccessible');
-                $this->load->view('v_footer');
-            }
+            $this->access();
         } else {
             $add_role = [
                 'name' => $this->input->post('add_role_name', TRUE),
                 'is_deletable' => "1",
-                'b_dashboard' => $this->Help->checktonumber($this->input->post('b_dashboard')),
-                'b_reports' => $this->Help->checktonumber($this->input->post('b_reports')),
-                'b_library' => $this->Help->checktonumber($this->input->post('b_library')),
-                'b_inventory' => $this->Help->checktonumber($this->input->post('b_inventory')),
-                'b_customer' => $this->Help->checktonumber($this->input->post('b_customer')),
-                'b_employee' => $this->Help->checktonumber($this->input->post('b_employee')),
-                'b_acc_setting' => $this->Help->checktonumber($this->input->post('b_acc_setting'))
+                'b_dashboard' => $this->Helper->checktonumber($this->input->post('b_dashboard')),
+                'b_reports' => $this->Helper->checktonumber($this->input->post('b_reports')),
+                'b_library' => $this->Helper->checktonumber($this->input->post('b_library')),
+                'b_inventory' => $this->Helper->checktonumber($this->input->post('b_inventory')),
+                'b_customer' => $this->Helper->checktonumber($this->input->post('b_customer')),
+                'b_employee' => $this->Helper->checktonumber($this->input->post('b_employee')),
+                'b_acc_setting' => $this->Helper->checktonumber($this->input->post('b_acc_setting'))
             ];
             $this->db->insert('tb_role', $add_role);
             $this->session->set_flashdata(
@@ -362,43 +191,18 @@ class Employee extends CI_Controller
 
     public function edit_access($id_role = '0')
     {
-        $data['title'] = 'Employee Access';
-        $data['email'] = $this->session->userdata('email');
-        $data['log_stat'] = $this->session->userdata('log_stat');
 
-        $cek = $this->Auth_model->validasi_role('b_employee');
-        if ($cek) {
+        $isRoleExist = $this->EmpAccess->isRoleExist($id_role);
+        if ($isRoleExist) {
 
-            if ($data['log_stat']) {
+            $main['emp'] = $this->EmpAccess->get_assigned_employee($id_role)->result();
+            $main['ea'] = $this->EmpAccess->get_emp_access($id_role);
+            $main['id_role'] = $id_role;
 
-                $isRoleExist = $this->EmpAccess->isRoleExist($id_role);
-
-                if ($isRoleExist) {
-
-                    $main['emp'] = $this->EmpAccess->get_assigned_employee($id_role)->result();
-                    $main['ea'] = $this->EmpAccess->get_emp_access($id_role);
-                    $main['id_role'] = $id_role;
-
-                    $data['nav'] = $this->Nav_model->get_navigation($data['email']);
-                    $this->load->view('v_header', $data);
-                    $this->load->view('employee/employee_access_edit', $main);
-                    $this->load->view('v_footer');
-                } elseif (!$isRoleExist) {
-                    $data['nav'] = $this->Nav_model->get_navigation($data['email']);
-                    $this->load->view('v_header', $data);
-                    $this->load->view('blank');
-                    $this->load->view('v_footer');
-                }
-            } else {
-                $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">Please log in first!</div>');
-                redirect('backoffice/employee/access');
-            }
-        } else {
-            //get data untuk navigation
-            $data['nav'] = $this->Nav_model->get_navigation($data['email']);
-            $this->load->view('v_header', $data);
-            $this->load->view('unaccessible');
-            $this->load->view('v_footer');
+            $this->Helper->view('employee/employee_access_edit', $main, 'b_employee');
+        } elseif (!$isRoleExist) {
+            $main['kosong'] = "";
+            $this->Helper->view('blank', $main, 'b_employee');
         }
     }
 
@@ -408,7 +212,7 @@ class Employee extends CI_Controller
         $this->form_validation->set_rules('edit_role_name', 'Role Name', 'trim|required|xss_clean');
 
         if ($this->form_validation->run() == FALSE) {
-            redirect('backoffice/employee/edit_access/' . $id_role);
+            $this->edit_access($id_role);
         } else {
 
             if ($this->EmpAccess->isRoleEditable($id_role)) {
@@ -416,13 +220,13 @@ class Employee extends CI_Controller
                 $data = [
                     'name' => $this->input->post('edit_role_name', TRUE),
                     'is_deletable' => "1",
-                    'b_dashboard' => $this->Help->checktonumber($this->input->post('b_dashboard')),
-                    'b_reports' => $this->Help->checktonumber($this->input->post('b_reports')),
-                    'b_library' => $this->Help->checktonumber($this->input->post('b_library')),
-                    'b_inventory' => $this->Help->checktonumber($this->input->post('b_inventory')),
-                    'b_customer' => $this->Help->checktonumber($this->input->post('b_customer')),
-                    'b_employee' => $this->Help->checktonumber($this->input->post('b_employee')),
-                    'b_acc_setting' => $this->Help->checktonumber($this->input->post('b_acc_setting'))
+                    'b_dashboard' => $this->Helper->checktonumber($this->input->post('b_dashboard')),
+                    'b_reports' => $this->Helper->checktonumber($this->input->post('b_reports')),
+                    'b_library' => $this->Helper->checktonumber($this->input->post('b_library')),
+                    'b_inventory' => $this->Helper->checktonumber($this->input->post('b_inventory')),
+                    'b_customer' => $this->Helper->checktonumber($this->input->post('b_customer')),
+                    'b_employee' => $this->Helper->checktonumber($this->input->post('b_employee')),
+                    'b_acc_setting' => $this->Helper->checktonumber($this->input->post('b_acc_setting'))
                 ];
                 // $this->EmpAccess->update_access($id_role, $data);
                 // $this->db->update('tb_role', $data);
@@ -448,31 +252,7 @@ class Employee extends CI_Controller
 
     public function pin()
     {
-
-        $cek = $this->Auth_model->validasi_role('b_employee');
-        $data['title'] = 'Employee PIN';
-
-        $data['email'] = $this->session->userdata('email');
-        $data['log_stat'] = $this->session->userdata('log_stat');
-
-        if ($cek) {
-
-            if ($data['log_stat']) {
-                $data['role'] = $this->EmpAccess->get_role()->result();
-                $data['nav'] = $this->Nav_model->get_navigation($data['email']);
-                $this->load->view('v_header', $data);
-                $this->load->view('employee/employee_pin');
-                $this->load->view('v_footer');
-            } else {
-                $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">Please log in first!</div>');
-                redirect('backoffice');
-            }
-        } else {
-            //get data untuk navigation
-            $data['nav'] = $this->Nav_model->get_navigation($data['email']);
-            $this->load->view('v_header', $data);
-            $this->load->view('unaccessible');
-            $this->load->view('v_footer');
-        }
+        $main['role'] = $this->EmpAccess->get_role()->result();
+        $this->Helper->view('employee/employee_pin', $main, 'b_employee');
     }
 }

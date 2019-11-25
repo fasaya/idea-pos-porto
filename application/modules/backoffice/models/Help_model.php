@@ -11,6 +11,7 @@ class Help_model extends CI_Model
         $header['nav'] = $this->Nav_model->get_navigation($header['email']);
 
         $header['kosong'] = "";
+        $main['kosong'] = "";
 
         $cek = $this->Auth_model->validasi_role($validasi);
         if ($cek) {

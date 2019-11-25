@@ -8,41 +8,15 @@ class Outlets extends CI_Controller
         parent::__construct();
         $this->load->library('form_validation');
         $this->load->model('Outlet_model', 'Outlet');
+        $this->load->model('Help_model', 'Helper');
     }
 
     public function index()
     {
+        $main['provinsi'] = $this->Outlet->fetch_provinsi();
+        $main['outlet'] = $this->Outlet->get_outlet()->result();
 
-        $data['title'] = 'Outlets';
-        $data['email'] = $this->session->userdata('email');
-        $data['log_stat'] = $this->session->userdata('log_stat');
-
-        $cek = $this->Auth_model->validasi_role('b_acc_setting');
-        if ($cek) {
-
-            if ($data['log_stat']) {
-
-                $main['provinsi'] = $this->Outlet->fetch_provinsi();
-
-                $main['outlet'] = $this->Outlet->get_outlet()->result();
-
-                //get data untuk navigation
-                $data['nav'] = $this->Nav_model->get_navigation($data['email']);
-                $this->load->view('v_header', $data);
-                $this->load->view('setting/outlet', $main);
-                $this->load->view('v_footer');
-            } else {
-                $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">Please log in first!</div>');
-                redirect('auth');
-            }
-        } else {
-            //get data untuk navigation
-            $data['nav'] = $this->Nav_model->get_navigation($data['email']);
-            // $data['menu1'] = $nav['reports'];
-            $this->load->view('v_header', $data);
-            $this->load->view('unaccessible');
-            $this->load->view('v_footer');
-        }
+        $this->Helper->view('setting/outlet', $main, 'b_acc_setting');
     }
 
     public function add()
@@ -57,36 +31,7 @@ class Outlets extends CI_Controller
 
         if ($this->form_validation->run() == false) {
 
-            $data['title'] = 'Outlets';
-            $data['email'] = $this->session->userdata('email');
-            $data['log_stat'] = $this->session->userdata('log_stat');
-
-            $cek = $this->Auth_model->validasi_role('b_acc_setting');
-            if ($cek) {
-
-                if ($data['log_stat']) {
-
-                    $main['provinsi'] = $this->Outlet->fetch_provinsi();
-
-                    $main['outlet'] = $this->Outlet->get_outlet()->result();
-
-                    //get data untuk navigation
-                    $data['nav'] = $this->Nav_model->get_navigation($data['email']);
-                    $this->load->view('v_header', $data);
-                    $this->load->view('setting/outlet', $main);
-                    $this->load->view('v_footer');
-                } else {
-                    $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">Please log in first!</div>');
-                    redirect('auth');
-                }
-            } else {
-                //get data untuk navigation
-                $data['nav'] = $this->Nav_model->get_navigation($data['email']);
-                // $data['menu1'] = $nav['reports'];
-                $this->load->view('v_header', $data);
-                $this->load->view('unaccessible');
-                $this->load->view('v_footer');
-            }
+            $this->index();
         } else {
             $data = [
                 'is_active' => '1',
@@ -104,38 +49,10 @@ class Outlets extends CI_Controller
 
     public function editOutlets($id_outlet = '0')
     {
-
-        $data['title'] = 'Outlets';
-        $data['email'] = $this->session->userdata('email');
-        $data['log_stat'] = $this->session->userdata('log_stat');
-
-        $cek = $this->Auth_model->validasi_role('b_acc_setting');
-
-        if ($cek) {
-
-            if ($data['log_stat']) {
-                $main['provinsi'] = $this->Outlet->fetch_provinsi();
-
-                $main['outlet'] = $this->Outlet->get_outlet_byid($id_outlet);
-                $main['id_outlet'] = $id_outlet;
-
-                //get data untuk navigation
-                $data['nav'] = $this->Nav_model->get_navigation($data['email']);
-                $this->load->view('v_header', $data);
-                $this->load->view('setting/outlet_edit', $main);
-                $this->load->view('v_footer');
-            } else {
-                $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">Please log in first!</div>');
-                redirect('auth');
-            }
-        } else {
-            //get data untuk navigation
-            $data['nav'] = $this->Nav_model->get_navigation($data['email']);
-            // $data['menu1'] = $nav['reports'];
-            $this->load->view('v_header', $data);
-            $this->load->view('unaccessible');
-            $this->load->view('v_footer');
-        }
+        $main['provinsi'] = $this->Outlet->fetch_provinsi();
+        $main['outlet'] = $this->Outlet->get_outlet_byid($id_outlet);
+        $main['id_outlet'] = $id_outlet;
+        $this->Helper->view('setting/outlet_edit', $main, 'b_acc_setting');
     }
 
     public function update($id_outlet = '0')
@@ -149,36 +66,7 @@ class Outlets extends CI_Controller
         $this->form_validation->set_rules('postal', 'Postal Code', 'trim|required|xss_clean');
 
         if ($this->form_validation->run() == FALSE) {
-            $data['title'] = 'Outlets';
-            $data['email'] = $this->session->userdata('email');
-            $data['log_stat'] = $this->session->userdata('log_stat');
-
-            $cek = $this->Auth_model->validasi_role('b_acc_setting');
-
-            if ($cek) {
-
-                if ($data['log_stat']) {
-
-                    $main['outlet'] = $this->Outlet->get_outlet_byid($id_outlet);
-                    $main['id_outlet'] = $id_outlet;
-
-                    //get data untuk navigation
-                    $data['nav'] = $this->Nav_model->get_navigation($data['email']);
-                    $this->load->view('v_header', $data);
-                    $this->load->view('setting/outlet_edit', $main);
-                    $this->load->view('v_footer');
-                } else {
-                    $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">Please log in first!</div>');
-                    redirect('auth');
-                }
-            } else {
-                //get data untuk navigation
-                $data['nav'] = $this->Nav_model->get_navigation($data['email']);
-                // $data['menu1'] = $nav['reports'];
-                $this->load->view('v_header', $data);
-                $this->load->view('unaccessible');
-                $this->load->view('v_footer');
-            }
+            $this->editOutlets($id_outlet);
         } else {
 
             $data = [
