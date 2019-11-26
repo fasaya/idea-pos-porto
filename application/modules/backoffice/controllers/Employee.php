@@ -250,9 +250,4 @@ class Employee extends CI_Controller
 
     //###########################################################
 
-    public function pin()
-    {
-        $main['role'] = $this->EmpAccess->get_role()->result();
-        $this->Helper->view('employee/employee_pin', $main, 'b_employee');
-    }
 }

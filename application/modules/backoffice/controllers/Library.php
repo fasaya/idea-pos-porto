@@ -22,17 +22,42 @@ class Library extends CI_Controller
 
     public function lists()
     {
+        $this->form_validation->set_rules('id_outlet', 'Outlet', 'xss_clean');
+        $this->form_validation->set_rules('id_outlet', 'Kategori', 'xss_clean');
+
         $main['category'] = $this->Library->get_category()->result();
         $main['outlet'] = $this->Library->get_outlet()->result();
-        $main['items'] = $this->Library->get_item();
-        $this->Helper->view('library/item_library', $main, 'b_library');
+
+        if ($this->form_validation->run() == FALSE) {
+            $query1 = $this->db->query("SELECT nama
+                                        FROM tb_outlet
+                                        WHERE id_outlet = '1'");
+            $result = $query1->row_array();
+            $id_provinsi = $result['nama'];
+
+            $main['nama_outlet'] = $result['nama'];
+            $main['id_outlet'] = "";
+            $main['id_kategori'] = "";
+            $main['items'] = $this->Library->get_item();
+            $this->Helper->view('library/item_library', $main, 'b_library');
+        } else {
+            $main['id_outlet'] = $this->input->post('id_outlet');
+            $main['id_kategori'] = $this->input->post('id_kategori');
+
+            $query1 = $this->db->query("SELECT nama
+                                        FROM tb_outlet
+                                        WHERE id_outlet = '" . $main['id_outlet'] . "'");
+            $result = $query1->row_array();
+
+            $main['nama_outlet'] = $result['nama'];
+            $main['items'] = $this->Library->get_item($main['id_outlet'], $main['id_kategori']);
+            $this->Helper->view('library/item_library', $main, 'b_library');
+        }
     }
 
-    function fetch_item()
+    public function editItem()
     {
-        if ($this->input->post('id_outlet') || $this->input->post('id_kategori') || $this->input->post('alert')) {
-            echo $this->Library->fetch_item($this->input->post('id_outlet'), $this->input->post('id_kategori'), $this->input->post('alert'));
-        }
+        // 
     }
 
     //###########################################################

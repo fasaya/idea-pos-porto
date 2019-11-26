@@ -270,11 +270,6 @@
 												Employee Access
 											</a>
 										</li>
-										<li>
-											<a class="nav-link" href="<?= base_url() ?>backoffice/employee/pin">
-												PIN Access
-											</a>
-										</li>
 									</ul>
 								</li>
 								<li class="nav-parent">

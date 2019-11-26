@@ -26,7 +26,7 @@
 						</div>
 						<div class="col-sm-6">
 							<div class="pull-right">
-								<button class="btn btn-sm btn-default"><i class="fas fa-store-alt"></i> Outlet 1</button>
+								<button class="btn btn-sm btn-default"><i class="fas fa-store-alt"></i> <?= $nama_outlet; ?></button>
 								<a href="" class="btn btn-sm btn-primary"><i class="fas fa-file-download"></i> Export</a>
 								<a href="#modalForm" class="modal-with-form btn btn-sm btn-primary"><i class="fas fa-plus"></i> Create Item</a>
 							</div>
@@ -35,31 +35,24 @@
 				</header>
 				<div class="card-body">
 					<div class="alert alert-default m-0">
-						<form action="">
+						<form action="<?= base_url() ?>backoffice/library/lists" method="post">
 							<h5 class="mt-0"><i class="fas fa-filter"></i> Filter</h5>
 							<div class="row">
 								<div class="col-sm-4">
-									<select data-plugin-selectTwo id="id_outlet" class="form-control populate" style="width:100%">
+									<select data-plugin-selectTwo name="id_outlet" id="id_outlet" class="form-control populate" style="width:100%">
 										<!-- <optgroup label="Alaskan/Hawaiian Time Zone"> -->
 										<?php foreach ($outlet as $o) : ?>
-											<option value="<?= $o->id_outlet; ?>"><?= $o->nama; ?></option>
+											<option value="<?= $o->id_outlet; ?>" <?php echo ($id_outlet == $o->id_outlet) ? "selected" : ""; ?>><?= $o->nama; ?></option>
 										<?php endforeach; ?>
 										<!-- </optgroup> -->
 									</select>
 								</div>
 								<div class="col-sm-3">
-									<select id="id_kategori" class="form-control" style="width:100%">
+									<select name="id_kategori" id="id_kategori" class="form-control" style="width:100%">
 										<option value="all" selected>All Categories</option>
 										<?php foreach ($category as $c) : ?>
-											<option value="<?= $c->id_kategori; ?>"><?= $c->nama; ?></option>
+											<option value="<?= $c->id_kategori; ?>" <?php echo ($id_kategori == $c->id_kategori) ? "selected" : ""; ?>><?= $c->nama; ?></option>
 										<?php endforeach; ?>
-									</select>
-								</div>
-								<div class="col-sm-3">
-									<select id="alert" class="form-control" style="width:100%">
-										<option value="all">All Inventory</option>
-										<option value="low">Low Stock Alert</option>
-										<option value="out">Out of Stock Alert</option>
 									</select>
 								</div>
 								<div class="col-sm-2">
@@ -104,7 +97,7 @@
 											<td></td>
 											<td></td>
 											<td></td>
-											<td class="actions-hover actions-fade text-center"><a href="' . base_url() . 'backoffice/library/editItem"><i class="fas fa-pencil-alt"></i></a></td>
+											<td class="actions-hover actions-fade text-center"><a href="<?= base_url() ?>backoffice/library/editItem"> <i class="fas fa-pencil-alt"></i></a></td>
 										</tr>
 									<?php } ?>
 								</tbody>
@@ -128,7 +121,7 @@
 			<form method="post" action="<?= base_url() ?>backoffice/library/additem">
 				<div class="form-group">
 					<label>Item Name</label>
-					<input type="text" class="form-control" placeholder="Item Name" name='nama'>
+					<input type="text" class="form-control" placeholder="Item Name" name=' nama'>
 				</div>
 				<div class="form-group">
 					<label>Category</label>

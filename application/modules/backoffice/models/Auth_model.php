@@ -11,6 +11,7 @@ class Auth_model extends CI_Model
         $email = $this->session->userdata('email');
 
         if (isset($email)) {
+
             // get id_role
             $user = $this->db->get_where('tb_login', ['email' => $email])->row_array();
             $id_role = $user['id_role'];
@@ -27,12 +28,7 @@ class Auth_model extends CI_Model
             }
         } else {
             $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">Please log in first!</div>');
-            redirect('auth');
+            redirect('backoffice/backoffice');
         }
-    }
-
-    function log_history($data)
-    {
-        // 
     }
 } //end model

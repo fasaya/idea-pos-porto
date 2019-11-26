@@ -61,23 +61,6 @@
                                     <?= form_error('id_role', '<small class="text-danger pl-3">', '</small>'); ?>
                                 </div>
                                 <div class="form-group">
-                                    <div class="row">
-                                        <div class="col-sm-4">
-                                            <div class="checkbox">
-                                                <label>
-                                                    <input type="checkbox" name="check_pin" id="check_pin" value="1" <?= ($data_user['pin'] != '') ? "checked" : ""; ?> onclick="myFunction()">
-                                                    Assign a PIN
-                                                </label>
-                                            </div>
-                                            <p style="font-size:12px;">Go to PIN Access to allow employees access to certain parts of your Point of Sale using their 4-digit PIN</p>
-                                        </div>
-                                        <div class="col-sm-8" id="input-pin">
-                                            <input type="password" id="pin" class="form-control" name='pin' value="<?= $data_user['pin']; ?>" placeholder="4-digit-PIN" style="width:200px;">
-                                            <?= form_error('pin', '<small class="text-danger pl-3">', '</small>'); ?>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group">
                                     <label>Textarea</label>
                                     <textarea name="deskripsi" class="form-control" rows="3" placeholder="Join date: 01 January 2019"><?= $data_user['deskripsi']; ?></textarea>
                                     <?= form_error('deskripsi', '<small class="text-danger pl-3">', '</small>'); ?>

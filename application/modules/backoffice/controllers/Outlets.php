@@ -50,6 +50,9 @@ class Outlets extends CI_Controller
     public function editOutlets($id_outlet = '0')
     {
         $main['provinsi'] = $this->Outlet->fetch_provinsi();
+        $main['kota'] = $this->Outlet->fetch_kota_byid($id_outlet);
+        $main['kecamatan'] = $this->Outlet->fetch_kecamatan_byid($id_outlet);
+
         $main['outlet'] = $this->Outlet->get_outlet_byid($id_outlet);
         $main['id_outlet'] = $id_outlet;
         $this->Helper->view('setting/outlet_edit', $main, 'b_acc_setting');

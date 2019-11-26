@@ -48,43 +48,43 @@
                                     <label>Backoffice</label>
                                     <div class="checkbox">
                                         <label>
-                                            <input type="checkbox" name="b_dashboard" value="1" <?= $this->Help->numbertocheck($ea['b_dashboard']); ?>>
+                                            <input type="checkbox" name="b_dashboard" value="1" <?= $this->Helper->numbertocheck($ea['b_dashboard']); ?>>
                                             Dashboard
                                         </label>
                                     </div>
                                     <div class="checkbox">
                                         <label>
-                                            <input type="checkbox" name="b_reports" value="1" <?= $this->Help->numbertocheck($ea['b_reports']); ?>>
+                                            <input type="checkbox" name="b_reports" value="1" <?= $this->Helper->numbertocheck($ea['b_reports']); ?>>
                                             Reports
                                         </label>
                                     </div>
                                     <div class="checkbox">
                                         <label>
-                                            <input type="checkbox" name="b_library" value="1" <?= $this->Help->numbertocheck($ea['b_library']); ?>>
+                                            <input type="checkbox" name="b_library" value="1" <?= $this->Helper->numbertocheck($ea['b_library']); ?>>
                                             Library
                                         </label>
                                     </div>
                                     <div class="checkbox">
                                         <label>
-                                            <input type="checkbox" name="b_inventory" value="1" <?= $this->Help->numbertocheck($ea['b_inventory']); ?>>
+                                            <input type="checkbox" name="b_inventory" value="1" <?= $this->Helper->numbertocheck($ea['b_inventory']); ?>>
                                             Inventory
                                         </label>
                                     </div>
                                     <div class="checkbox">
                                         <label>
-                                            <input type="checkbox" name="b_customer" value="1" <?= $this->Help->numbertocheck($ea['b_customer']); ?>>
+                                            <input type="checkbox" name="b_customer" value="1" <?= $this->Helper->numbertocheck($ea['b_customer']); ?>>
                                             Customer
                                         </label>
                                     </div>
                                     <div class="checkbox">
                                         <label>
-                                            <input type="checkbox" name="b_employee" value="1" <?= $this->Help->numbertocheck($ea['b_employee']); ?>>
+                                            <input type="checkbox" name="b_employee" value="1" <?= $this->Helper->numbertocheck($ea['b_employee']); ?>>
                                             Employee
                                         </label>
                                     </div>
                                     <div class="checkbox">
                                         <label>
-                                            <input type="checkbox" name="b_acc_setting" value="1" <?= $this->Help->numbertocheck($ea['b_acc_setting']); ?>>
+                                            <input type="checkbox" name="b_acc_setting" value="1" <?= $this->Helper->numbertocheck($ea['b_acc_setting']); ?>>
                                             Account Setting
                                         </label>
                                     </div>

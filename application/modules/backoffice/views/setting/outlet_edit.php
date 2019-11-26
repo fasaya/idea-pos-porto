@@ -65,14 +65,14 @@
                                 <div class="form-group">
                                     <label>City / Kabupaten</label>
                                     <select name="kota" id="kota" class="form-control">
-                                        <option value="">SELECT PROVINCE FIRST</option>
+                                        <?= $kota; ?>
                                     </select>
                                     <?= form_error('kota', '<small class="text-danger pl-3">', '</small>'); ?>
                                 </div>
                                 <div class="form-group">
                                     <label>Kecamatan</label>
                                     <select name="kecamatan" id="kecamatan" class="form-control">
-                                        <option value="">SELECT CITY/KABUPATEN FIRST</option>
+                                        <?= $kecamatan; ?>
                                     </select>
                                     <?= form_error('kecamatan', '<small class="text-danger pl-3">', '</small>'); ?>
                                 </div>
@@ -122,3 +122,40 @@
         </footer>
     </section>
 </div>
+
+<script>
+    $(document).ready(function() {
+
+        $('#provinsi').change(function() {
+            var id_provinsi = $('#provinsi').val();
+            if (id_provinsi != '') {
+                $.ajax({
+                    url: "<?= base_url(); ?>backoffice/outlets/fetch_kota",
+                    method: "POST",
+                    data: {
+                        id_provinsi: id_provinsi
+                    },
+                    success: function(data) {
+                        $('#kota').html(data);
+                    }
+                })
+            }
+        });
+
+        $('#kota').change(function() {
+            var id_kota = $('#kota').val();
+            if (id_kota != '') {
+                $.ajax({
+                    url: "<?= base_url(); ?>backoffice/outlets/fetch_kecamatan",
+                    method: "POST",
+                    data: {
+                        id_kota: id_kota
+                    },
+                    success: function(data) {
+                        $('#kecamatan').html(data);
+                    }
+                })
+            }
+        });
+    });
+</script>

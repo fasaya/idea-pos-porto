@@ -40,15 +40,15 @@
 
 <body>
     <!-- start: page -->
-    <section class="body-sign">
-        <div class="center-sign">
+    <section class="body-sign" style="padding-top:15%">
+        <div class="center-sign" style="vertical-align: baseline !important;">
             <a href="#" class="logo float-left">
                 <img src="<?= base_url() ?>template/img/logo.png" height="54" alt="Idea POS" />
             </a>
 
             <div class="panel card-sign">
                 <div class="card-title-sign mt-3 text-right">
-                    <h2 class="title text-uppercase font-weight-bold m-0"><i class="fas fa-user mr-1"></i> Sign In Backoffice</h2>
+                    <h2 class="title text-uppercase font-weight-bold m-0"><i class="fas fa-user mr-1"></i> Sign In</h2>
                 </div>
                 <div class="card-body">
                     <?= $this->session->flashdata('message') ?>
@@ -56,7 +56,7 @@
                         <div class="form-group mb-3">
                             <label>Email</label>
                             <div class="input-group">
-                                <input name="email" type="text" class="form-control form-control-lg" />
+                                <input name="email" type="text" class="form-control" />
                                 <span class="input-group-append">
                                     <span class="input-group-text">
                                         <i class="fas fa-user"></i>
@@ -69,10 +69,10 @@
                         <div class="form-group mb-3">
                             <div class="clearfix">
                                 <label class="float-left">Password</label>
-                                <a href="#" class="float-right">Forget Password?</a>
+                                <a href="pages-recover-password.html" class="float-right">Forget Password?</a>
                             </div>
                             <div class="input-group">
-                                <input name="password" type="password" class="form-control form-control-lg" />
+                                <input name="password" type="password" class="form-control" />
                                 <span class="input-group-append">
                                     <span class="input-group-text">
                                         <i class="fas fa-lock"></i>
