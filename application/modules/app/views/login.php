@@ -40,8 +40,8 @@
 
 <body>
     <!-- start: page -->
-    <section class="body-sign" style="padding-top:15%">
-        <div class="center-sign" style="vertical-align: baseline !important;">
+    <section class="body-sign">
+        <div class="center-sign">
             <a href="#" class="logo float-left">
                 <img src="<?= base_url() ?>template/img/logo.png" height="54" alt="Idea POS" />
             </a>
@@ -52,7 +52,7 @@
                 </div>
                 <div class="card-body">
                     <?= $this->session->flashdata('message') ?>
-                    <form action="<?= base_url() ?>backoffice/backoffice" method="post">
+                    <form action="<?= base_url() ?>app/app" method="post">
                         <div class="form-group mb-3">
                             <label>Email</label>
                             <div class="input-group">

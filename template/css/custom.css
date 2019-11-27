@@ -1,1 +1,9 @@
 /* Add here all your CSS customizations */
+@media only screen and (max-width: 767px) {
+	.body-app {
+		padding-top: 18px;
+	}
+}
+.app-isi {
+    padding-bottom: 10px;
+}
