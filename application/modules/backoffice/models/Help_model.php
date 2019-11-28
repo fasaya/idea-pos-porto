@@ -61,4 +61,16 @@ class Help_model extends CI_Model
             return "";
         }
     }
+
+    function setting($kode = null, $ket = "nilai")
+    {
+        //$ket dapat berupa 'nilai' atau 'status'
+        $query = $this->db->query(' SELECT nilai, status
+                                    FROM setting
+                                    WHERE kode = "' . $kode . '" ');
+        $result = $query->row_array();
+        if ($result) {
+            return $result[$ket];
+        }
+    }
 } //end model

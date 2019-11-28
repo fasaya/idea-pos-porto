@@ -26,7 +26,7 @@
 						</div>
 						<div class="col-sm-6">
 							<div class="pull-right">
-								<button class="btn btn-sm btn-default"><i class="fas fa-store-alt"></i> <?= $nama_outlet; ?></button>
+								<!-- <button class="btn btn-sm btn-default"><i class="fas fa-store-alt"></i> <?= $nama_outlet; ?></button> -->
 								<a href="" class="btn btn-sm btn-primary"><i class="fas fa-file-download"></i> Export</a>
 								<a href="#modalForm" class="modal-with-form btn btn-sm btn-primary"><i class="fas fa-plus"></i> Create Item</a>
 							</div>
@@ -39,15 +39,6 @@
 							<h5 class="mt-0"><i class="fas fa-filter"></i> Filter</h5>
 							<div class="row">
 								<div class="col-sm-4">
-									<select data-plugin-selectTwo name="id_outlet" id="id_outlet" class="form-control populate" style="width:100%">
-										<!-- <optgroup label="Alaskan/Hawaiian Time Zone"> -->
-										<?php foreach ($outlet as $o) : ?>
-											<option value="<?= $o->id_outlet; ?>" <?php echo ($id_outlet == $o->id_outlet) ? "selected" : ""; ?>><?= $o->nama; ?></option>
-										<?php endforeach; ?>
-										<!-- </optgroup> -->
-									</select>
-								</div>
-								<div class="col-sm-3">
 									<select name="id_kategori" id="id_kategori" class="form-control" style="width:100%">
 										<option value="all" selected>All Categories</option>
 										<?php foreach ($category as $c) : ?>
@@ -72,11 +63,8 @@
 							</div>
 						<?php endif; ?>
 
-						<div class="col-sm-12">
-							<?= $this->session->flashdata('message') ?>
-						</div>
-
 						<div class="col-sm-12" style="margin-top:20px;">
+							<?= $this->session->flashdata('message') ?>
 							<table class="table table-bordered table-striped mb-0" id="datatable-default">
 								<thead>
 									<tr>
@@ -89,15 +77,14 @@
 									</tr>
 								</thead>
 								<tbody id="items">
-									<?php foreach ($items as $row) {
-										?>
+									<?php foreach ($items as $row) { ?>
 										<tr>
 											<td><?= $row->nama; ?></td>
-											<td><?= $row->kategori; ?> </td>
+											<td><?= $row->kategori; ?></td>
 											<td></td>
 											<td></td>
 											<td></td>
-											<td class="actions-hover actions-fade text-center"><a href="<?= base_url() ?>backoffice/library/editItem"> <i class="fas fa-pencil-alt"></i></a></td>
+											<td class="text-center"><a href="<?= base_url() ?>backoffice/library/editItem/<?= $row->id_item; ?>"> <i class="fas fa-pencil-alt text-dark"></i></a></td>
 										</tr>
 									<?php } ?>
 								</tbody>
@@ -121,7 +108,7 @@
 			<form method="post" action="<?= base_url() ?>backoffice/library/additem">
 				<div class="form-group">
 					<label>Item Name</label>
-					<input type="text" class="form-control" placeholder="Item Name" name=' nama'>
+					<input type="text" class="form-control" placeholder="Item Name" name="nama">
 				</div>
 				<div class="form-group">
 					<label>Category</label>
@@ -136,58 +123,18 @@
 					<div class="input-group">
 						<span class="input-group-prepend">
 							<span class="input-group-text">
-								Rp
+								<?= $this->Helper->setting("CURRENCY") ?>
 							</span>
 						</span>
 						<input type="text" name="harga" class="form-control" placeholder="10000">
 					</div>
-				</div>
-				<div class="form-group">
-					<label class="">Vertical Group</label>
-
-					<section class="form-group-vertical">
-						<div class="input-group">
-							<input type="text" class="form-control input-group-prepend" placeholder="Username">
-							<input type="text" class="form-control" placeholder="Username">
-						</div>
-						<div class="input-group">
-							<input type="text" class="form-control input-group-prepend" placeholder="Username">
-							<input type="text" class="form-control" placeholder="Username">
-						</div>
-						<button type="button" class="btn btn-primary btn-sm btn-block last">Add Option</button>
-					</section>
-				</div>
-				<div class="form-group">
-					<label>Select Modifier</label>
-					<select class="form-control" multiple="multiple" data-plugin-multiselect data-plugin-options='{ "maxHeight": 200, "includeSelectAllOption": true }' id="modifier" name="id_modifier">
-						<!-- <optgroup label="Mathematics"> -->
-						<option value="analysis">Analysis</option>
-						<option value="algebra">Linear Algebra</option>
-						<option value="discrete">Discrete Mathematics</option>
-						<option value="numerical">Numerical Analysis</option>
-						<option value="probability">Probability Theory</option>
-						<!-- </optgroup> -->
-					</select>
-				</div>
-				<div class="form-group">
-					<label>Description</label>
-					<textarea name="deskripsi" class="form-control" rows="3" placeholder="Item description"></textarea>
-				</div>
-				<div class="form-group">
-					<label>Outlet</label><br>
-					<select name="id_outlet" class="form-control">
-						<?php foreach ($outlet as $o) : ?>
-							<option value="<?= $o->id_outlet; ?>"><?= $o->nama; ?></option>
-						<?php endforeach; ?>
-					</select>
 				</div>
 		</div>
 		<footer class="card-footer">
 			<div class="row">
 				<div class="col-md-12 text-right">
 					<button class="btn btn-default modal-dismiss">Cancel</button>
-					<button type="submit" name="saveall" class="btn btn-primary">Save to All Outlets</button>
-					<button type="submit" name="save" class="btn btn-primary">Save</button>
+					<button type="submit" name="save" class="btn btn-primary">Add Item</button>
 				</div>
 			</div>
 		</footer>

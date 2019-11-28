@@ -27,7 +27,7 @@ class Auth_model extends CI_Model
             }
         } else {
             $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">Please log in first!</div>');
-            redirect('auth');
+            redirect('app/app');
         }
     }
 

@@ -22,42 +22,57 @@ class Library extends CI_Controller
 
     public function lists()
     {
-        $this->form_validation->set_rules('id_outlet', 'Outlet', 'xss_clean');
-        $this->form_validation->set_rules('id_outlet', 'Kategori', 'xss_clean');
+        // $this->form_validation->set_rules('id_outlet', 'Outlet', 'xss_clean');
+        $this->form_validation->set_rules('id_kategori', 'Kategori', 'xss_clean');
 
         $main['category'] = $this->Library->get_category()->result();
         $main['outlet'] = $this->Library->get_outlet()->result();
 
         if ($this->form_validation->run() == FALSE) {
-            $query1 = $this->db->query("SELECT nama
-                                        FROM tb_outlet
-                                        WHERE id_outlet = '1'");
-            $result = $query1->row_array();
-            $id_provinsi = $result['nama'];
-
-            $main['nama_outlet'] = $result['nama'];
-            $main['id_outlet'] = "";
-            $main['id_kategori'] = "";
             $main['items'] = $this->Library->get_item();
+            $main['id_kategori'] = "";
             $this->Helper->view('library/item_library', $main, 'b_library');
         } else {
-            $main['id_outlet'] = $this->input->post('id_outlet');
             $main['id_kategori'] = $this->input->post('id_kategori');
 
-            $query1 = $this->db->query("SELECT nama
-                                        FROM tb_outlet
-                                        WHERE id_outlet = '" . $main['id_outlet'] . "'");
-            $result = $query1->row_array();
-
-            $main['nama_outlet'] = $result['nama'];
-            $main['items'] = $this->Library->get_item($main['id_outlet'], $main['id_kategori']);
+            $main['items'] = $this->Library->get_item($main['id_kategori']);
             $this->Helper->view('library/item_library', $main, 'b_library');
         }
     }
 
-    public function editItem()
+    public function additem()
     {
-        // 
+        $this->form_validation->set_rules('nama', 'Item Name', 'trim|required|xss_clean');
+        $this->form_validation->set_rules('kategori', 'Category', 'trim|required|xss_clean');
+        $this->form_validation->set_rules('harga', 'Price', 'trim|required|numeric|xss_clean');
+
+        if ($this->form_validation->run() == false) {
+            $this->lists();
+        } else {
+            $data = [
+                'nama' => $this->input->post('nama', TRUE),
+                'harga' => $this->input->post('harga', TRUE),
+                'id_kategori' => $this->input->post('kategori', TRUE)
+            ];
+            $this->Library->addItem($data);
+        }
+    }
+
+    public function edititem($id_item)
+    {
+        $query = $this->db->query(" SELECT id_item
+                                    FROM tb_product
+                                    WHERE id_item = '" . $id_item . "'");
+
+        if ($query->num_rows() > 0) {
+            $main['id_item'] = $id_item;
+            $main['options'] = $this->Library->get_mod_options_byID();
+            $main['outlets'] = $this->Library->get_mod_outlet_byID();
+            $main['outletAssign'] = $this->Library->get_outlet()->result();
+            $this->Helper->view('library/modifiers_edit', $main, 'b_library');
+        } else {
+            redirect('backoffice/library/modifiers');
+        }
     }
 
     //###########################################################
@@ -65,6 +80,7 @@ class Library extends CI_Controller
 
     public function modifiers()
     {
+        $main['modifiers'] = $this->Library->get_modifiers();
         $main['outlet'] = $this->Library->get_outlet()->result();
         $this->Helper->view('library/modifiers', $main, 'b_library');
     }
@@ -79,24 +95,172 @@ class Library extends CI_Controller
     function addmodifier()
     {
         $this->form_validation->set_rules('nama', 'Modifier Name', 'trim|required|xss_clean');
-        $this->form_validation->set_rules('id_outlet', 'Outlet', 'trim|required|xss_clean');
 
         if ($this->form_validation->run() == false) {
 
             $this->modifiers();
         } else {
-            if (isset($_POST['saveall'])) {
-                $add = [
-                    'nama' => $this->input->post('nama', TRUE)
-                ];
-                $this->Library->addModifier('saveall', $add);
-            } elseif (isset($_POST['save'])) {
-                $add = [
-                    'id_outlet' => $this->input->post('id_outlet', TRUE),
-                    'nama' => $this->input->post('nama', TRUE)
-                ];
-                $this->Library->addModifier('save', $add);
-            }
+            $data = [
+                'nama' => $this->input->post('nama', TRUE)
+            ];
+            $this->Library->addModifier($data);
         }
     }
+
+    function modDelOpt($id_mod_opt)
+    {
+        $data = [
+            'is_deleted' => "1"
+        ];
+        $this->db->update('tb_product_mod_opt', $data, "id_mod_opt = '" . $id_mod_opt . "'");
+
+        $query = $this->db->query(' SELECT id_mod
+                                    FROM tb_product_mod_opt
+                                    WHERE id_mod_opt = "' . $id_mod_opt . '" ');
+        $result = $query->row_array();
+        $id_mod = $result['id_mod'];
+
+        $this->session->set_flashdata(
+            'message_1',
+            '<div class="alert alert-success">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            Options deleted!
+            </div>'
+        );
+        redirect('backoffice/library/editmodifier/' . $id_mod);
+    }
+
+    function modUnassign($id_mod_rel)
+    {
+        // // update
+        // $data = [
+        //     'is_deleted' => "1"
+        // ];
+        // $this->db->update('tb_product_mod_rel_outlet', $data, "id_mod_rel = '" . $id_mod_rel . "'");
+
+        $query = $this->db->query(" SELECT id_mod
+                                            FROM tb_product_mod_rel_outlet
+                                            WHERE id_mod_rel = '" . $id_mod_rel . "'");
+        $result = $query->row_array();
+        $id_mod = $result['id_mod'];
+
+        // delete
+        $this->db->delete('tb_product_mod_rel_outlet', array('id_mod_rel' => $id_mod_rel));
+
+        $this->session->set_flashdata(
+            'message_2',
+            '<div class="alert alert-success">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            Outlet unassigned!
+            </div>'
+        );
+        redirect('backoffice/library/editmodifier/' . $id_mod);
+    }
+
+    function modAddOpt($id_mod = "")
+    {
+        $this->form_validation->set_rules('nama', 'Option Name', 'trim|required|xss_clean');
+        $this->form_validation->set_rules('price', 'Price', 'trim|required|numeric|xss_clean');
+
+        $query = $this->db->query(" SELECT id_mod
+                                    FROM tb_product_mod
+                                    WHERE id_mod = '" . $id_mod . "'");
+        if ($query->num_rows() > 0) {
+
+            if ($this->form_validation->run() == false) {
+
+                $this->editmodifier($id_mod);
+            } else {
+                $data = [
+                    'id_mod' => $id_mod,
+                    'nama' => $this->input->post('nama', TRUE),
+                    'harga' => $this->input->post('price', TRUE),
+                    'is_deleted' => "0"
+                ];
+                $this->db->insert('tb_product_mod_opt', $data);
+                $this->session->set_flashdata(
+                    'message_1',
+                    '<div class="alert alert-success">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                    New options added!
+                    </div>'
+                );
+                redirect('backoffice/library/editmodifier/' . $id_mod);
+            }
+        } else {
+            redirect('backoffice/library/modifiers');
+        }
+    }
+
+    function modAssign($id_mod = "")
+    {
+        $this->form_validation->set_rules('outlet', 'Outlet', 'trim|required|xss_clean');
+
+        $query = $this->db->query(" SELECT id_mod
+                                    FROM tb_product_mod
+                                    WHERE id_mod = '" . $id_mod . "'");
+        if ($query->num_rows() > 0) {
+
+            if ($this->form_validation->run() == false) {
+
+                $this->editmodifier($id_mod);
+            } else {
+                $data = [
+                    'id_mod' => $id_mod,
+                    'id_outlet' => $this->input->post('outlet', TRUE),
+                    'is_deleted' => "0"
+                ];
+
+                $query = $this->db->query(" SELECT id_mod_rel
+                                            FROM tb_product_mod_rel_outlet
+                                            WHERE id_mod = '" . $id_mod . "' 
+                                                AND id_outlet = '" . $data['id_outlet'] . "'");
+                if ($query->num_rows() <= 0) {
+                    $this->db->insert('tb_product_mod_rel_outlet', $data);
+                    $this->session->set_flashdata(
+                        'message_2',
+                        '<div class="alert alert-success">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                        New options added!
+                        </div>'
+                    );
+                    redirect('backoffice/library/editmodifier/' . $id_mod);
+                } else {
+                    $this->session->set_flashdata(
+                        'message_2',
+                        '<div class="alert alert-danger">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                        Outlet already assigned!
+                        </div>'
+                    );
+                    redirect('backoffice/library/editmodifier/' . $id_mod);
+                }
+            }
+        } else {
+            redirect('backoffice/library/modifiers');
+        }
+    }
+
+    function editmodifier($id_mod = "")
+    {
+        $query = $this->db->query(" SELECT id_mod
+                                    FROM tb_product_mod
+                                    WHERE id_mod = '" . $id_mod . "'");
+        if ($query->num_rows() > 0) {
+
+            $main['id_mod'] = $id_mod;
+            $main['options'] = $this->Library->get_mod_options_byID($id_mod);
+            $main['outlets'] = $this->Library->get_mod_outlet_byID($id_mod);
+            $main['outletAssign'] = $this->Library->get_outlet()->result();
+            $this->Helper->view('library/modifiers_edit', $main, 'b_library');
+        } else {
+            redirect('backoffice/library/modifiers');
+        }
+    }
+
+
+    //###########################################################
+    // CATEGORIES
+
+
 }
