@@ -73,7 +73,7 @@
 										<th>Pricing</th>
 										<th>In Stock</th>
 										<th>Stock Alert</th>
-										<th class="text-center"><i class="fas fa-pencil-alt"></i></th>
+										<th class="text-center">Action</th>
 									</tr>
 								</thead>
 								<tbody id="items">
@@ -81,10 +81,14 @@
 										<tr>
 											<td><?= $row->nama; ?></td>
 											<td><?= $row->kategori; ?></td>
+											<td><?= $this->Library->item_pricing_byID($row->id_item); ?></td>
 											<td></td>
 											<td></td>
-											<td></td>
-											<td class="text-center"><a href="<?= base_url() ?>backoffice/library/editItem/<?= $row->id_item; ?>"> <i class="fas fa-pencil-alt text-dark"></i></a></td>
+											<td class="text-center">
+												<a href="<?= base_url() ?>backoffice/library/editItem/<?= $row->id_item; ?>"> <i class="fas fa-pencil-alt text-primary"></i></a>
+
+												<a href="#modalDanger" class="modal-with-move-anim" onclick="showDelVar('<?= $row->id_item; ?>')"><i class="fas fa-trash-alt text-danger"></i> </a>
+											</td>
 										</tr>
 									<?php } ?>
 								</tbody>
@@ -142,50 +146,21 @@
 	</section>
 </div>
 
-<!-- <script>
-	$(document).ready(function() {
 
-		$(document).ready(function() {
-			var id_outlet = $('#id_outlet').val();
-			var id_kategori = $('#id_kategori').val();
-			var alert = $('#alert').val();
+<script>
+	function showDelVar(id_item) {
 
-			if (id_outlet != '' || id_kategori != '' || alert != '') {
-				$.ajax({
-					url: "<?= base_url(); ?>backoffice/library/fetch_item",
-					method: "POST",
-					data: {
-						id_outlet: id_outlet,
-						id_kategori: id_kategori,
-						alert: alert
-					},
-					success: function(data) {
-						$('#items').html(data);
-					}
-				})
-			}
-		});
-
-		$("#id_outlet, #id_kategori, #alert").change(function() {
-			var id_outlet = $('#id_outlet').val();
-			var id_kategori = $('#id_kategori').val();
-			var alert = $('#alert').val();
-
-			if (id_outlet != '' || id_kategori != '' || alert != '') {
-				$.ajax({
-					url: "<?= base_url(); ?>backoffice/library/fetch_item",
-					method: "POST",
-					data: {
-						id_outlet: id_outlet,
-						id_kategori: id_kategori,
-						alert: alert
-					},
-					success: function(data) {
-						$('#items').html(data);
-					}
-				})
-			}
-		});
-
-	});
-</script> -->
+		if (id_item != '') {
+			$.ajax({
+				url: "<?= base_url(); ?>backoffice/library/fetch_delItem",
+				method: "POST",
+				data: {
+					id_item: id_item
+				},
+				success: function(data) {
+					$('#isiCard').html(data);
+				}
+			});
+		}
+	}
+</script>

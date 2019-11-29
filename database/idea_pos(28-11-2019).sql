@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 29, 2019 at 12:00 PM
+-- Generation Time: Nov 28, 2019 at 11:55 AM
 -- Server version: 10.0.17-MariaDB
 -- PHP Version: 5.6.14
 
@@ -7845,9 +7845,7 @@ INSERT INTO `login_history` (`id_history`, `email`, `date`, `ip_address`, `user_
 (35, 'aya_maruf@yahoo.com', '2019-11-27 13:24:47', '::1', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.108 Safari/537.36'),
 (36, 'aya_maruf@yahoo.com', '2019-11-27 13:25:16', '::1', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.108 Safari/537.36'),
 (37, 'aya_maruf@yahoo.com', '2019-11-27 13:26:22', '::1', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.108 Safari/537.36'),
-(38, 'andifasaya@gmail.com', '2019-11-28 10:46:32', '::1', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.108 Safari/537.36'),
-(39, 'aya_maruf@yahoo.com', '2019-11-29 10:56:56', '::1', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.108 Safari/537.36'),
-(40, 'aya_maruf@yahoo.com', '2019-11-29 11:03:58', '::1', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.108 Safari/537.36');
+(38, 'andifasaya@gmail.com', '2019-11-28 10:46:32', '::1', 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.108 Safari/537.36');
 
 -- --------------------------------------------------------
 
@@ -8133,9 +8131,7 @@ CREATE TABLE `tb_product_rel_outlet` (
 INSERT INTO `tb_product_rel_outlet` (`id_prd_rel_outlet`, `id_item`, `id_outlet`) VALUES
 (1, 2, 1),
 (2, 3, 1),
-(3, 4, 2),
-(4, 4, 3),
-(7, 5, 1);
+(3, 4, 2);
 
 -- --------------------------------------------------------
 
@@ -8169,13 +8165,7 @@ CREATE TABLE `tb_product_variant` (
 --
 
 INSERT INTO `tb_product_variant` (`id_variant`, `id_item`, `nama`, `harga`, `is_deleted`) VALUES
-(1, 5, 'itemsss', '12000', '0'),
-(2, 5, 'Var 2', '24000', '0'),
-(3, 5, 'Vanilla', '20000', '0'),
-(4, 5, 'sss', '1', '0'),
-(5, 4, 'varian 3', '40000', '0'),
-(6, 4, 'Varian 2', '25000', '0'),
-(7, 4, 'Varian 1', '12000', '0');
+(1, 5, 'itemsss', '1234567', '0');
 
 -- --------------------------------------------------------
 
@@ -8375,7 +8365,7 @@ ALTER TABLE `tb_user`
 -- AUTO_INCREMENT for table `login_history`
 --
 ALTER TABLE `login_history`
-  MODIFY `id_history` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
+  MODIFY `id_history` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
 --
 -- AUTO_INCREMENT for table `setting`
 --
@@ -8410,7 +8400,7 @@ ALTER TABLE `tb_product_category`
 -- AUTO_INCREMENT for table `tb_product_mod`
 --
 ALTER TABLE `tb_product_mod`
-  MODIFY `id_mod` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id_mod` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 --
 -- AUTO_INCREMENT for table `tb_product_mod_opt`
 --
@@ -8425,7 +8415,7 @@ ALTER TABLE `tb_product_mod_rel_outlet`
 -- AUTO_INCREMENT for table `tb_product_rel_outlet`
 --
 ALTER TABLE `tb_product_rel_outlet`
-  MODIFY `id_prd_rel_outlet` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id_prd_rel_outlet` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 --
 -- AUTO_INCREMENT for table `tb_product_type`
 --
@@ -8435,7 +8425,7 @@ ALTER TABLE `tb_product_type`
 -- AUTO_INCREMENT for table `tb_product_variant`
 --
 ALTER TABLE `tb_product_variant`
-  MODIFY `id_variant` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id_variant` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT for table `tb_role`
 --

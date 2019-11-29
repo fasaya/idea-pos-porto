@@ -1,3 +1,44 @@
+<!-- Modal Form -->
+<div id="modalDanger" class="zoom-anim-dialog modal-block modal-block-sm modal-header-color modal-block-danger mfp-hide">
+    <section class="card" id="isiCard">
+        <header class="card-header">
+            <h2 class="card-title">Loading</h2>
+        </header>
+        <div class="card-body">
+            <div class="text-center">
+                <p class="text-center">Loading...</p>
+            </div>
+        </div>
+        <footer class="card-footer">
+            <div class="row">
+                <div class="col-md-12 text-right">
+                    <button class="btn btn-default modal-dismiss">Close</button>
+                </div>
+            </div>
+        </footer>
+    </section>
+</div>
+<!-- Modal Form -->
+<div id="modalPrimary" class="zoom-anim-dialog modal-block modal-block-sm modal-header-color modal-block-primary mfp-hide">
+    <section class="card" id="isiCard">
+        <header class="card-header">
+            <h2 class="card-title">Loading</h2>
+        </header>
+        <div class="card-body">
+            <div class="text-center">
+                <p class="text-center">Loading...</p>
+            </div>
+        </div>
+        <footer class="card-footer">
+            <div class="row">
+                <div class="col-md-12 text-right">
+                    <button class="btn btn-default modal-dismiss">Close</button>
+                </div>
+            </div>
+        </footer>
+    </section>
+</div>
+
 </div>
 
 </section>

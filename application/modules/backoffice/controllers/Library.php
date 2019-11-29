@@ -63,15 +63,238 @@ class Library extends CI_Controller
         $query = $this->db->query(" SELECT id_item
                                     FROM tb_product
                                     WHERE id_item = '" . $id_item . "'");
-
         if ($query->num_rows() > 0) {
             $main['id_item'] = $id_item;
-            $main['options'] = $this->Library->get_mod_options_byID();
-            $main['outlets'] = $this->Library->get_mod_outlet_byID();
+            $main['variant'] = $this->Library->get_item_variant_byID($id_item);
+            $main['outlets'] = $this->Library->get_item_outlet_byID($id_item);
             $main['outletAssign'] = $this->Library->get_outlet()->result();
-            $this->Helper->view('library/modifiers_edit', $main, 'b_library');
+            $this->Helper->view('library/item_edit', $main, 'b_library');
         } else {
-            redirect('backoffice/library/modifiers');
+            redirect('backoffice/library/lists');
+        }
+    }
+
+    function itemAddVar($id_item = "")
+    {
+        $this->form_validation->set_rules('nama', 'Variant Name', 'trim|required|xss_clean');
+        $this->form_validation->set_rules('price', 'Price', 'trim|required|numeric|xss_clean');
+
+        $query = $this->db->query(" SELECT id_item
+                                    FROM tb_product
+                                    WHERE id_item = '" . $id_item . "'");
+        if ($query->num_rows() > 0) {
+
+            if ($this->form_validation->run() == false) {
+
+                $this->edititem($id_item);
+            } else {
+                $data = [
+                    'id_item' => $id_item,
+                    'nama' => $this->input->post('nama', TRUE),
+                    'harga' => $this->input->post('price', TRUE),
+                    'is_deleted' => "0"
+                ];
+                $this->db->insert('tb_product_variant', $data);
+                $this->session->set_flashdata(
+                    'message_1',
+                    '<div class="alert alert-success">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                    New variant added!
+                    </div>'
+                );
+                redirect('backoffice/library/edititem/' . $id_item);
+            }
+        } else {
+            redirect('backoffice/library/lists');
+        }
+    }
+
+    function itemDelete($id_item)
+    {
+        // cek berapa isinya variant dari item itu
+        $query1 = $this->db->query(" SELECT id_item
+                                    FROM tb_product
+                                    WHERE id_item = '" . $id_item . "'");
+        if ($query1->num_rows() > 0) {
+            //Start database transaction
+            $this->db->trans_start();
+
+            $data = [
+                'is_deleted' => "1"
+            ];
+            $this->db->update('tb_product', $data, "id_item = '" . $id_item . "'");
+            $this->db->update('tb_product_variant', $data, "id_item = '" . $id_item . "'");
+
+            //Start database transaction
+            $this->db->trans_complete();
+
+            if ($this->db->trans_status() === FALSE) {
+                $this->session->set_flashdata(
+                    'message',
+                    '<div class="alert alert-danger">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                    Item delete failed!
+                    </div>'
+                );
+                redirect('backoffice/library/lists');
+            } else {
+                $this->session->set_flashdata(
+                    'message',
+                    '<div class="alert alert-success">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                    Item deleted!
+                    </div>'
+                );
+                redirect('backoffice/library/lists');
+            }
+        }
+    }
+    function itemDelVar($id_variant)
+    {
+        // cek berapa isinya variant dari item itu
+        $query1 = $this->db->query(" SELECT id_item
+                                    FROM tb_product_variant
+                                    WHERE id_variant = '" . $id_variant . "'");
+        if ($query1->num_rows() > 0) {
+            $result1 = $query1->row_array();
+            $id_item = $result1['id_item'];
+
+            $data = [
+                'is_deleted' => "1"
+            ];
+            $this->db->update('tb_product_variant', $data, "id_variant = '" . $id_variant . "'");
+
+            $this->session->set_flashdata(
+                'message_1',
+                '<div class="alert alert-success">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                Varian deleted!
+                </div>'
+            );
+            redirect('backoffice/library/edititem/' . $id_item);
+        }
+    }
+
+    function itemUpdateVar($id_variant)
+    {
+        $this->form_validation->set_rules('nama', 'Variant Name', 'trim|required|xss_clean');
+        $this->form_validation->set_rules('price', 'Price', 'trim|required|numeric|xss_clean');
+
+        $query = $this->db->query(" SELECT id_item
+                                    FROM tb_product_variant
+                                    WHERE id_variant = '" . $id_variant . "'");
+        if ($query->num_rows() > 0) {
+            $result = $query->row_array();
+            $id_item = $result['id_item'];
+            if ($this->form_validation->run() == false) {
+                $this->edititem($id_item);
+            } else {
+                $data = [
+                    'nama' => $this->input->post('nama', TRUE),
+                    'harga' => $this->input->post('price', TRUE)
+                ];
+                $this->db->update('tb_product_variant', $data, "id_variant = '" . $id_variant . "'");
+                $this->session->set_flashdata(
+                    'message_1',
+                    '<div class="alert alert-success">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                    Variant updated!
+                    </div>'
+                );
+                redirect('backoffice/library/edititem/' . $id_item);
+            }
+        } else {
+            redirect('backoffice/library/lists');
+        }
+    }
+
+    function itemAssign($id_item = "")
+    {
+        $this->form_validation->set_rules('outlet', 'Outlet', 'trim|required|xss_clean');
+
+        $query = $this->db->query(" SELECT id_item
+                                    FROM tb_product
+                                    WHERE id_item = '" . $id_item . "'");
+        if ($query->num_rows() > 0) {
+
+            if ($this->form_validation->run() == false) {
+
+                $this->edititem($id_item);
+            } else {
+                $data = [
+                    'id_item' => $id_item,
+                    'id_outlet' => $this->input->post('outlet', TRUE)
+                    // ,
+                    // 'is_deleted' => "0"
+                ];
+
+                $query = $this->db->query(" SELECT id_prd_rel_outlet
+                                            FROM tb_product_rel_outlet
+                                            WHERE id_item = '" . $id_item . "' 
+                                                AND id_outlet = '" . $data['id_outlet'] . "'");
+                if ($query->num_rows() <= 0) {
+                    $this->db->insert('tb_product_rel_outlet', $data);
+                    $this->session->set_flashdata(
+                        'message_2',
+                        '<div class="alert alert-success">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                        New outlet assigned!
+                        </div>'
+                    );
+                    redirect('backoffice/library/edititem/' . $id_item);
+                } else {
+                    $this->session->set_flashdata(
+                        'message_2',
+                        '<div class="alert alert-danger">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                        Outlet already assigned!
+                        </div>'
+                    );
+                    redirect('backoffice/library/edititem/' . $id_item);
+                }
+            }
+        } else {
+            redirect('backoffice/library/lists');
+        }
+    }
+
+    function itemUnassign($id_prd_rel_outlet)
+    {
+        // // update
+        // $data = [
+        //     'is_deleted' => "1"
+        // ];
+        // $this->db->update('tb_product_mod_rel_outlet', $data, "id_mod_rel = '" . $id_mod_rel . "'");
+
+        $query = $this->db->query(" SELECT id_item
+                                            FROM tb_product_rel_outlet
+                                            WHERE id_prd_rel_outlet = '" . $id_prd_rel_outlet . "'");
+        $result = $query->row_array();
+        $id_item = $result['id_item'];
+
+        // delete
+        $this->db->delete('tb_product_rel_outlet', array('id_prd_rel_outlet' => $id_prd_rel_outlet));
+
+        $this->session->set_flashdata(
+            'message_2',
+            '<div class="alert alert-success">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            Outlet unassigned!
+            </div>'
+        );
+        redirect('backoffice/library/edititem/' . $id_item);
+    }
+
+    function fetch_datavariant()
+    {
+        if ($this->input->post('id_variant')) {
+            echo $this->Library->fetch_dataVariant($this->input->post('id_variant'));
+        }
+    }
+    function fetch_delitem()
+    {
+        if ($this->input->post('id_item')) {
+            echo $this->Library->fetch_delItem($this->input->post('id_item'));
         }
     }
 
@@ -221,7 +444,7 @@ class Library extends CI_Controller
                         'message_2',
                         '<div class="alert alert-success">
                         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                        New options added!
+                        New outlet assigned!
                         </div>'
                     );
                     redirect('backoffice/library/editmodifier/' . $id_mod);
