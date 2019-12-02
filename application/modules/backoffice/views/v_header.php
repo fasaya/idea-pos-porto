@@ -172,27 +172,27 @@
 											</a>
 										</li>
 										<li>
-											<a class="nav-link" href="pages-recover-password.html">
+											<a class="nav-link" href="<?= base_url() ?>backoffice/library/categories">
 												Categories
 											</a>
 										</li>
 										<li>
-											<a class="nav-link" href="pages-lock-screen.html">
+											<a class="nav-link" href="<?= base_url() ?>backoffice/library/promo">
 												Promo
 											</a>
 										</li>
 										<li>
-											<a class="nav-link" href="pages-user-profile.html">
+											<a class="nav-link" href="<?= base_url() ?>backoffice/library/discount">
 												Discount
 											</a>
 										</li>
 										<li>
-											<a class="nav-link" href="pages-session-timeout.html">
+											<a class="nav-link" href="<?= base_url() ?>backoffice/library/taxes">
 												Taxes
 											</a>
 										</li>
 										<li>
-											<a class="nav-link" href="pages-calendar.html">
+											<a class="nav-link" href="<?= base_url() ?>backoffice/library/gratuity">
 												Gratuity
 											</a>
 										</li>

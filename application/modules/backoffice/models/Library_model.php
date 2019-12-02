@@ -364,4 +364,85 @@ class Library_model extends CI_Model
 
         redirect('backoffice/library/modifiers');
     }
+
+    // #######################################################
+    // Category
+
+    function category_item_stocks($id_kategori)
+    {
+        $query = $this->db->query(" SELECT nama
+                                    FROM tb_product
+                                    WHERE id_kategori = '" . $id_kategori . "' AND is_deleted = '0'");
+        if ($query->num_rows() > 0) {
+            return $query->num_rows() . " items";
+        } elseif ($query->num_rows() <= 0) {
+            return "No items";
+        }
+    }
+
+    function category_assigned_item()
+    {
+        $this->db->select("tb_product.nama AS nama, tb_product.id_item AS id_item");
+        $this->db->from("tb_product, tb_product_category");
+        $this->db->where("tb_product.id_kategori = tb_product_category.id_kategori");
+        $this->db->where("tb_product.is_deleted", "0");
+        $this->db->where("tb_product_category.is_deleted", "0");
+        $this->db->order_by("tb_product.id_kategori", "DESC");
+        return $this->db->get()->result();
+    }
+
+    function addCategory($data)
+    {
+        $this->db->insert('tb_product_category', $data);
+
+        if ($this->db->affected_rows() > 0) {
+            $this->session->set_flashdata(
+                'message',
+                '<div class="alert alert-success">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                New category added! You can now add the category options.
+                </div>'
+            );
+            redirect('backoffice/library/categories');
+        } else {
+            $this->session->set_flashdata(
+                'message',
+                '<div class="alert alert-danger">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                Add new category failed!
+                </div>'
+            );
+            redirect('backoffice/library/categories');
+        }
+    }
+
+    function fetch_delCategory($id_kategori)
+    {
+        if ($id_kategori != "") {
+
+            $query1 = $this->db->query(" SELECT id_kategori
+                                    FROM tb_product_category
+                                    WHERE id_kategori = '" . $id_kategori . "'");
+            if ($query1->num_rows() > 0) {
+                $result = $query1->row_array();
+                $id_kategori = $result['id_kategori'];
+                $output =
+                    '<header class="card-header">
+                        <h2 class="card-title">Delete this category?</h2>
+                    </header>
+                    <div class="card-body">
+                        <form method="post" action="' . base_url() . 'backoffice/library/categoryDelete/' . $id_kategori . '">
+                            <div class="form-group">
+                                <h4>Are you sure you want to delete?</h4>
+                            </div>
+                            <div class="form-group float-right">
+                                <button class="btn btn-danger" type="submit">Delete</button>
+                                <button class="btn btn-default modal-dismiss">Close</button>
+                            </div>
+                        </form>
+                    </div>';
+            }
+            return $output;
+        }
+    }
 } //end model

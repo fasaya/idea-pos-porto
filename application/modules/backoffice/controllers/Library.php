@@ -485,5 +485,89 @@ class Library extends CI_Controller
     //###########################################################
     // CATEGORIES
 
+    function categories()
+    {
+        $main['category'] = $this->Library->get_category()->result();
+        $this->Helper->view('library/categories', $main, 'b_library');
+    }
 
+    function addcategory()
+    {
+        $this->form_validation->set_rules('nama', 'Category Name', 'trim|required|xss_clean');
+
+        if ($this->form_validation->run() == false) {
+
+            $this->modifiers();
+        } else {
+            $data = [
+                'nama' => $this->input->post('nama', TRUE),
+                'is_deletable' => "1",
+                'is_deleted' => "0"
+
+            ];
+            $this->Library->addCategory($data);
+        }
+    }
+
+    function fetch_delCategory()
+    {
+        if ($this->input->post('id_kategori')) {
+            echo $this->Library->fetch_delCategory($this->input->post('id_kategori'));
+        }
+    }
+
+    function categoryDelete($id_kategori)
+    {
+        // cek
+        $query1 = $this->db->query(" SELECT id_kategori
+                                    FROM tb_product_category
+                                    WHERE id_kategori = '" . $id_kategori . "'");
+        if ($query1->num_rows() > 0) {
+            //Start database transaction
+            $this->db->trans_start();
+
+            $data = [
+                'is_deleted' => "1"
+            ];
+            $this->db->update('tb_product_category', $data, "id_kategori = '" . $id_kategori . "'");
+
+            //Start database transaction
+            $this->db->trans_complete();
+
+            if ($this->db->trans_status() === FALSE) {
+                $this->session->set_flashdata(
+                    'message',
+                    '<div class="alert alert-danger">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                    Category delete failed!
+                    </div>'
+                );
+                redirect('backoffice/library/categories');
+            } else {
+                $this->session->set_flashdata(
+                    'message',
+                    '<div class="alert alert-success">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                    Category deleted!
+                    </div>'
+                );
+                redirect('backoffice/library/categories');
+            }
+        }
+    }
+
+    public function editcategory($id_kategori)
+    {
+        // cek
+        $query = $this->db->query(" SELECT id_kategori
+                                    FROM tb_product_category
+                                    WHERE id_kategori = '" . $id_kategori . "'");
+        if ($query->num_rows() > 0) {
+            $main['id_kategori'] = $id_kategori;
+            $main['assignedItem'] = $this->Library->category_assigned_item();
+            $this->Helper->view('library/categories_edit', $main, 'b_library');
+        } else {
+            redirect('backoffice/library/categories');
+        }
+    }
 }
